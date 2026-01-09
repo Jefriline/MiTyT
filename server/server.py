@@ -4,6 +4,6 @@ app = Flask("MiTyT-Server")
 
 @app.route("/", methods=["GET"])
 def status():
-    return "App Funcionando"
+    return "app funcionando"
 
 app.run(port=5000)
