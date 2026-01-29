@@ -1,9 +1,10 @@
 from flask import Flask
 
-app = Flask("MiTyT-Server")
+app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def status():
     return "app funcionando"
 
-app.run(port=5000)
+if __name__ == '__main__': 
+    app.run(host="0.0.0.0", port=5000, debug=True)
