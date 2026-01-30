@@ -11,13 +11,18 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-14">
         <div class="flex-shrink-0">
-          <a href="/" class="text-2xl font-bold text-blue-600">Consulta de información</a>
+          <a href="/" class="text-2xl font-bold text-[#39A900]">Consulta de información</a>
         </div>
         <ul class="flex h-auto w-[30%] px-4 justify-center items-center space-x-6">
           <li class="flex w-full justify-around items-center">
-            <a href="/" class="text-gray-700 hover:text-blue-600 transition">Inicio</a>
-            <a href="/login" class="text-gray-700 hover:text-blue-600 transition">Iniciar sesión</a>
-            <a href="/perfil" class="ml-4 text-gray-700 hover:text-blue-600 transition">Perfil</a>
+            <a href="/" class="text-gray-700 hover:text-[#39A900] transition">Inicio</a>
+            
+          {% if session.get('login_user') %}
+            <a href="/users/perfil" class="ml-4 text-gray-700 hover:text-[#39A900] transition">Perfil</a>
+            <a href="/users/logout" class="ml-4 text-gray-700 hover:text-[#39A900] transition">Cerrar sesión</a>
+          {%else %}
+            <a href="/users/login" class="text-gray-700 hover:text-[#39A900] transition">Iniciar sesión</a>
+          {% endif %}
           </li>
         </ul>
       </div>
@@ -25,14 +30,14 @@
   </nav>
 
   <main class="flex-grow items-center">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-5 py-5">
       {% block content %}
 
       {% endblock %}
     </div>
   </main>
 
-  <footer class="bg-gray-800 text-gray-300">
+  <footer class="bg-[#39A900] text-gray-300">
     <div class="flex max-w-6xl mx-auto px-4 sm:px-6 lg:px-3 py-3 items-center justify-center">
       <div class="flex w-auto flex-col items-center space-y-4">
         <h3 class="text-white font-bold text-lg mb-4">Enlaces de ayuda</h3>

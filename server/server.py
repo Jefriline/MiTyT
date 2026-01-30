@@ -1,6 +1,4 @@
 import os
-
-from flask import Flask
 from flask import Flask, render_template
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -10,8 +8,8 @@ from routes.user_routes.user_routes import users_bp
 
 load_dotenv()
 
-app = Flask(__name__)
-
+app = Flask(__name__, template_folder="../Client/templates")
+app.secret_key = os.getenv("SECRET_KEY", "default-secret-key")
 
 CORS_ORIGINS = "*"
 CORS(app, origins=CORS_ORIGINS, supports_credentials=False)
@@ -21,16 +19,6 @@ CORS(app, origins=CORS_ORIGINS, supports_credentials=False)
 def home():
     return render_template("index.html")
 
-@app.route("/login")
-def login():
-    return render_template("login.html")
-
-@app.route("/perfil")
-def perfi():
-    return render_template("perfil.html")
-
-
-"""rutas usuarios"""
 app.register_blueprint(users_bp)
 
 

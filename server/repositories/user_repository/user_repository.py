@@ -20,3 +20,6 @@ class UserRepository:
             if (index + 1) % BATCH_SIZE == 0:
                 time.sleep(DELAY_SECONDS)
         return inserted
+    
+    def find_by_document(self, doc_number: str):
+        return next((user for user in self._users if user["Nro_Documento"] == doc_number), None)
