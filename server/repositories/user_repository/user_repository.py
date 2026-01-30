@@ -21,5 +21,20 @@ class UserRepository:
                 time.sleep(DELAY_SECONDS)
         return inserted
     
-    def find_by_document(self, doc_number: str):
-        return next((user for user in self._users if user["Nro_Documento"] == doc_number), None)
+    def find_by_document(self, doc_number: str) -> dict | None:
+        if not doc_number or not doc_number.strip():
+            return None
+        term = doc_number.strip()
+        snapshot = (
+            db.child("users")
+            .order_by_child("Nro Documento")
+            .equal_to(term)
+            .get()
+        )
+        if snapshot is None or not snapshot.each():
+            return None
+        first = snapshot.each()[0]
+        user_data = first.val()
+        if not isinstance(user_data, dict):
+            return None
+        return user_data

@@ -44,8 +44,8 @@
           <h2 class="font-black text-[#39A900] uppercase tracking-wider text-sm mb-4">Datos básicos</h2>
           <div class="space-y-3">
             <p class="text-xl font-bold text-gray-900">Nombre: <span>{{ user.Nombre }}</span></p>
-            <p class="text-gray-600 text-sm"><span class="font-semibold text-gray-800">Documento:</span> {{ user.TipoDocumento }} {{ user.Nro_Documento }}</p>
-            <p class="text-gray-600 text-sm"><span class="font-semibold text-gray-800">Email:</span> {{ user.correo }}</p>
+            <p class="text-gray-600 text-sm"><span class="font-semibold text-gray-800">Documento:</span> {{ user.TipoDocumento }} {{ user['Nro Documento'] }}</p>
+            <p class="text-gray-600 text-sm"><span class="font-semibold text-gray-800">Email:</span> {{ user.Correo }}</p>
           </div>
         </div>
 
@@ -62,10 +62,10 @@
         <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-gray-200 hover:shadow-2xl transition-shadow duration-300">
           <h2 class="font-black text-[#39A900] uppercase tracking-wider text-sm mb-4">Convocatoria</h2>
           <div class="space-y-2 text-sm text-gray-700">
-            <p><span class="font-bold text-gray-900">Estado:</span> {{ user.InformacionConvocatoria.EstadoConvocatoria }}</p>
-            <p><span class="font-bold text-gray-900">Pago:</span> {{ user.InformacionConvocatoria.ResponsablePago }}</p>
+            <p><span class="font-bold text-gray-900">Estado:</span> {{ user.InformacionConvocatorio.EstadoConvocatoria }}</p>
+            <p><span class="font-bold text-gray-900">Pago:</span> {{ user.InformacionConvocatorio.ResponablePago }}</p>
             <div class="mt-4 p-3 bg-green-50 rounded-lg text-xs text-green-800">
-               <strong>Obs:</strong> {{ user.InformacionConvocatoria.Observaciones }}
+               <strong>Obs:</strong> {{ user.InformacionConvocatorio.Observaciones }}
             </div>
           </div>
         </div>

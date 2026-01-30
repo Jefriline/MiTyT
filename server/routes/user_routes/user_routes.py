@@ -1,11 +1,15 @@
 from flask import Blueprint, render_template, request, session, redirect
+
 from controllers.user_controller.users_upload import UsersUploadController
-from middlewares.user_middlewares.validate_excel_upload_middleware import validate_excel_upload
+from controllers.user_controller.users_search import UsersSearchController
 from controllers.user_controller.users_auth import ControllerAuth
+from middlewares.user_middlewares.validate_excel_upload_middleware import validate_excel_upload
 from middlewares.user_middlewares.ValidateAuth import MiddlewareAuthUser
+from services.user_service.user_service import UserService
 
 upload_controller = UsersUploadController()
 auth_controller = ControllerAuth()
+search_controller = UsersSearchController(UserService())
 middleware_auth = MiddlewareAuthUser()
 
 users_bp = Blueprint('users', __name__, url_prefix='/users')
@@ -46,10 +50,4 @@ def logout():
 
 @users_bp.route("/search", methods=["POST"])
 def searchUsers():
-    try:
-        term = request.form.get("search_term").strip()
-        result = auth_controller.handle_search(term)
-        return render_template("index.html", user=result.get("user", None), error=result.get("error"))
-    except Exception as e:
-        print(f"Error en searchUsers: {e}")
-        return render_template("index.html", error="Error al procesar la búsqueda")     
+    return search_controller.handle_search()     
