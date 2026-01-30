@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
 <body class="flex flex-col min-h-screen bg-gray-50">
-  <nav class="bg-white shadow-md">
+  <nav class="bg-white shadow-md flex-none">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-14">
         <div class="flex-shrink-0">
@@ -29,23 +29,21 @@
     </div>
   </nav>
 
-  <main class="flex-grow items-center">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-5 py-5">
+  <main class="flex-grow flex flex-col"> 
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-5 py-5 flex-grow flex flex-col">
       {% block content %}
-
       {% endblock %}
     </div>
   </main>
 
-  <footer class="bg-[#39A900] text-gray-300">
-    <div class="flex max-w-6xl mx-auto px-4 sm:px-6 lg:px-3 py-3 items-center justify-center">
-      <div class="flex w-auto flex-col items-center space-y-4">
-        <h3 class="text-white font-bold text-lg mb-4">Enlaces de ayuda</h3>
-          <ul class="flex space-x-4 text-sm items-center justify-center">
+  <footer class="bg-[#39A900] text-gray-300 ">
+    <div class="flex max-w-6xl mx-auto px-4 sm:px-6 lg:px-2 py-1 items-center justify-center">
+      <div class="flex w-[50%] flex-col items-center justify-center space-y-2">
+          <ul class="flex space-x-4 py-2 text-sm items-center justify-center">
             <li><a href="https://www.icfes.gov.co/" class="hover:text-white transition">Acceso a Icfes</a></li>
             <li><a href="/Ayuda" class="hover:text-white transition">Ayuda en Incripción </a></li>
           </ul>
-        <hr class="w-full border-gray-600 my-4" />
+        <hr class="w-full border-gray-600 " />
         <div class="">
            <p class="text-center text-sm">&copy; 2026. Todos los derechos reservados.</p>
         </div>  
