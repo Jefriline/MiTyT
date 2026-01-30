@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %} Perfil - Administrador {% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-96 py-12">
+    <div class="text-center mb-12">
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">Perfil de Administrador</h1>
+      <p class="text-xl text-gray-600">Gestiona la información y configura las opciones del sistema</p>
+    </div>
+
+    <div class="w-full max-w-md">
+        <section class="bg-white shadow-lg rounded-lg px-7 pt-6 pb-8 mb-4 py-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Información del Perfil</h2>
+            <div>
+                <h3 class="text-lg font-semibold text-gray-700">Nombre de Usuario: admin</h3>
+                <h3 class="text-lg font-semibold text-gray-700">Correo Electrónico: admin@mityt.com</h3>
+            </div>
+        </section>
+        <div>
+            <input type="file" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}MiTyT{% endblock %}</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+<body class="flex flex-col min-h-screen bg-gray-50">
+  <nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex-shrink-0">
+          <a href="/" class="text-2xl font-bold text-blue-600">Consulta de información</a>
+        </div>
+        <ul class="flex h-auto w-[30%] px-4 justify-center items-center space-x-6">
+          <li class="flex w-full justify-around items-center">
+            <a href="/" class="text-gray-700 hover:text-blue-600 transition">Inicio</a>
+            <a href="/login" class="text-gray-700 hover:text-blue-600 transition">Iniciar sesión</a>
+            <a href="/perfil" class="ml-4 text-gray-700 hover:text-blue-600 transition">Perfil</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-grow items-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {% block content %}
+
+      {% endblock %}
+    </div>
+  </main>
+
+  <footer class="bg-gray-800 text-gray-300">
+    <div class="flex max-w-6xl mx-auto px-4 sm:px-6 lg:px-3 py-3 items-center justify-center">
+      <div class="flex w-auto flex-col items-center space-y-4">
+        <h3 class="text-white font-bold text-lg mb-4">Enlaces de ayuda</h3>
+          <ul class="flex space-x-4 text-sm items-center justify-center">
+            <li><a href="https://www.icfes.gov.co/" class="hover:text-white transition">Acceso a Icfes</a></li>
+            <li><a href="/Ayuda" class="hover:text-white transition">Ayuda en Incripción </a></li>
+          </ul>
+        <hr class="w-full border-gray-600 my-4" />
+        <div class="">
+           <p class="text-center text-sm">&copy; 2026. Todos los derechos reservados.</p>
+        </div>  
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
