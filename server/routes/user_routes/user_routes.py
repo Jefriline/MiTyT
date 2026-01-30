@@ -1,0 +1,55 @@
+from flask import Blueprint, render_template, request, session, redirect
+from controllers.user_controller.users_upload import UsersUploadController
+from middlewares.user_middlewares.validate_excel_upload_middleware import validate_excel_upload
+from controllers.user_controller.users_auth import ControllerAuth
+from middlewares.user_middlewares.ValidateAuth import MiddlewareAuthUser
+
+upload_controller = UsersUploadController()
+auth_controller = ControllerAuth()
+middleware_auth = MiddlewareAuthUser()
+
+users_bp = Blueprint('users', __name__, url_prefix='/users')
+
+@users_bp.route("/upload", methods=["POST"])
+@validate_excel_upload
+def users_upload():
+    return upload_controller.upload()
+
+@users_bp.route("/login", methods=["GET", "POST"])
+def login():
+    try: 
+        if request.method == "GET":
+            return render_template("login.html")
+        
+        if request.method == "POST":
+            username = request.form.get("username").strip()
+            password = request.form.get("password").strip()
+            if auth_controller.is_authenticated(username, password):
+                return redirect("/users/perfil")
+            else: 
+                print("Autenticación fallida")
+                return render_template("login.html", error="Credenciales inválidas")
+    except Exception as e:
+        return render_template("login.html", error="Error al procesar la solicitud")
+    return render_template("login.html")
+
+@users_bp.route("/perfil")
+def perfil():
+    if "login_user" not in session:
+        return redirect("/users/login")
+    return render_template("perfil.html")
+
+@users_bp.route("/logout")
+def logout():
+    session.pop("login_user", None)
+    return redirect("/")
+
+@users_bp.route("/search", methods=["POST"])
+def searchUsers():
+    try:
+        term = request.form.get("search_term").strip()
+        result = auth_controller.handle_search(term)
+        return render_template("index.html", user=result.get("user", None), error=result.get("error"))
+    except Exception as e:
+        print(f"Error en searchUsers: {e}")
+        return render_template("index.html", error="Error al procesar la búsqueda")     

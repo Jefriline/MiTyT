@@ -1,40 +1,29 @@
-from flask import Flask, render_template, request, redirect, session
 
-app = Flask("MiTyT-Server")
+from flask import Flask, render_template
+import os
+from flask_cors import CORS
+from dotenv import load_dotenv
+
+from routes.user_routes.user_routes import users_bp
+
+
+load_dotenv()
+
+app = Flask(__name__, template_folder="../Client/templates")
+app.secret_key = os.getenv("SECRET_KEY", "default-secret-key")
+
+CORS_ORIGINS = "*"
+CORS(app, origins=CORS_ORIGINS, supports_credentials=False)
+
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    try: 
-        if request.method == "POST":
-            username = request.form["username"]
-            password = request.form["password"]
-            if username == "admin@mityt.com" and password == "admin123":
-                session["login_user"] = {
-                    "username": username,
-                    "role": "admin"
-                }
-                return redirect("/perfil")
-    except Exception as e:
-        return render_template("login.html", error="Error al procesar la solicitud")
-    return render_template("login.html")
 
-@app.route("/perfil")
-def perfil():
-    return render_template("perfil.html")
+app.register_blueprint(users_bp)
 
-@app.route("/logout")
-def logout():
-    session.pop("login_user", None)
-    return redirect("/")
 
-@app.route("/search", methods=["GET", "POST"])
-def search():
-    query = request.form.get("query")
-    # Aquí iría la lógica para buscar la información basada en la consulta
-    results = ["Resultado 1 para " + query, "Resultado 2 para " + query]
-    return render_template("results.html", query=query, results=results)
-app.run(debug=True, port=5000)
+PORT = int(os.getenv("PORT", "5000"))
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=PORT, debug=True)
