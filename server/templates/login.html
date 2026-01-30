@@ -9,7 +9,7 @@
     </div>
 
     <div class="w-full max-w-md">
-      <form id="loginForm" class="bg-white shadow-lg rounded-lg px-7 pt-6 pb-8 mb-4 py-12">
+      <form id="loginForm" action="/login" method="post" class="bg-white shadow-lg rounded-lg px-7 pt-6 pb-8 mb-4 py-12">
         <div class="mb-4 space-y-8">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="username" type="text">
             Usuario
@@ -17,6 +17,7 @@
             <input
                 type="email"
                 id="username"
+                name="username"
                 placeholder="Ingresa tu usuario"
                 class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 shadow-lg transition"
             />
@@ -26,6 +27,7 @@
             <input
                 type="password"
                 id="password"
+                name="password"
                 placeholder="Ingresa tu contraseña"
                 class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 shadow-lg transition"
                 />

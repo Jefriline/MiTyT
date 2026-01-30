@@ -16,8 +16,13 @@
         <ul class="flex h-auto w-[30%] px-4 justify-center items-center space-x-6">
           <li class="flex w-full justify-around items-center">
             <a href="/" class="text-gray-700 hover:text-blue-600 transition">Inicio</a>
-            <a href="/login" class="text-gray-700 hover:text-blue-600 transition">Iniciar sesión</a>
+            
+          {% if session.get('login_user') %}
             <a href="/perfil" class="ml-4 text-gray-700 hover:text-blue-600 transition">Perfil</a>
+            <a href="/logout" class="ml-4 text-gray-700 hover:text-blue-600 transition">Cerrar sesión</a>
+          {%else %}
+            <a href="/login" class="text-gray-700 hover:text-blue-600 transition">Iniciar sesión</a>
+          {% endif %}
           </li>
         </ul>
       </div>
