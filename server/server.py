@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from dotenv import load_dotenv
 

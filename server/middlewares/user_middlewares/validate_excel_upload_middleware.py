@@ -2,7 +2,7 @@ from functools import wraps
 
 from flask import request, jsonify
 
-ALLOWED_EXTENSIONS = {"xlsx", "xls"}
+ALLOWED_EXTENSIONS = {"xlsx"}
 
 
 def _allowed_file(filename: str) -> bool:
