@@ -32,5 +32,7 @@ class AprendizCreateDTO(BaseModel):
 
 class UserUploadResponseDTO(BaseModel):
     inserted_count: int
+    updated_count: int
     total_rows: int
     errors: list[str]
+    warnings: list[str] = []
