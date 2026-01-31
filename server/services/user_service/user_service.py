@@ -44,7 +44,7 @@ class UserService:
         try:
             user = self.repository.find_by_document(doc_number)
             if not user:
-                return {"error": "User not found", "user": None}
+                return {"error": "Usuario no encontrado", "user": None}
             return {"user": user, "error": None}
         except Exception as e:
             print(f"Service Error: {e}")
