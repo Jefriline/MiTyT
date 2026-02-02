@@ -1,5 +1,5 @@
 from flask import session
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 
 from dtos.user_dto.admin_dto import AdminLoginDTO
 from dtos.user_dto.user_upload_dto import UserUploadResponseDTO
@@ -39,12 +39,12 @@ class UserService:
             print("Email de administrador invalido")
             return False
 
-        password_hash = generate_password_hash(credentials.password)
-        is_valid_admin = self.repository.authenticate_admin(
-            email_key=email_key,
-            password_hash=password_hash,
-        )
-        if not is_valid_admin:
+        stored_password_hash = self.repository.get_admin_password_hash(email_key)
+        if not stored_password_hash:
+            print("Credenciales incorrectas")
+            return False
+
+        if not check_password_hash(stored_password_hash, credentials.password):
             print("Credenciales incorrectas")
             return False
 
