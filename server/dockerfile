@@ -1,0 +1,41 @@
+# Construcción 
+FROM python:3.11-slim AS builder
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends gcc python3-dev
+
+# Creación de entorno virtual
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY requirements.txt .
+#Forzar instlalación limpia de dependencias
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir gunicorn
+
+# etapa final
+FROM python:3.11-slim
+WORKDIR /app
+
+# Copiamos venv desde la etapa de construcción
+COPY --from=builder /opt/venv /opt/venv
+
+# Configuramos variables
+ENV PATH="/opt/venv/bin:$PATH"
+ENV PYTHONUNBUFFERED=1
+
+# Seguridad
+RUN groupadd -r flaskgroup && useradd -r -g flaskgroup flaskuser
+
+# Copiamos el resto de código
+COPY . .
+
+# permisos de usuario
+RUN chown -R flaskuser:flaskgroup /app /opt/venv
+USER flaskuser
+
+EXPOSE 5000
+
+# Comandos de ejecución
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "server:app", "--workers", "4", "--log-level", "debug"]

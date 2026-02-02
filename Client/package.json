@@ -1,0 +1,17 @@
+{
+    "name": "frontend-mityt",
+    "version": "1.0.0",
+    "description": "Frontend para la aplicación MiTyT",
+    "devDependencies": {
+        "@tailwindcss/cli": "^4.1.18",
+        "tailwindcss": "^4.1.18"
+    },
+    "scripts": {
+        "build": "npx tailwindcss -i ./static/css/styles.css -o ./static/css/dist.css --watch"
+    },
+    "main": "index.js",
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs"
+}

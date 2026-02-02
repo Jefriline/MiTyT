@@ -9,7 +9,12 @@ from routes.help_routes.help_routes import help_bp
 
 load_dotenv()
 
-app = Flask(__name__, template_folder="../Client/templates", static_folder="../Client/static")
+base_dir = os.path.abspath(os.path.dirname(__file__))
+
+template_dir = os.path.join(base_dir, '..', 'Client', 'templates')
+static_dir = os.path.join(base_dir, "..", "Client", "static")
+
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 app.secret_key = os.getenv("SECRET_KEY", "default-secret-key")
 
 CORS_ORIGINS = "*"
