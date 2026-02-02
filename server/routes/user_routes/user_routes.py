@@ -27,8 +27,8 @@ def login():
             return render_template("login.html")
         
         if request.method == "POST":
-            username = request.form.get("username").strip()
-            password = request.form.get("password").strip()
+            username = (request.form.get("username") or "").strip()
+            password = (request.form.get("password") or "").strip()
             if auth_controller.is_authenticated(username, password):
                 return redirect("/users/perfil")
             else: 

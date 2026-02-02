@@ -10,6 +10,9 @@
 
     <div class="w-full max-w-md">
       <form id="loginForm" action="/users/login" method="post" class="bg-white shadow-lg rounded-lg px-7 pt-6 pb-8 mb-4 py-12">
+        {% if error %}
+        <div class="mb-4 p-3 rounded-lg bg-red-100 text-red-800 border border-red-300 text-sm">{{ error }}</div>
+        {% endif %}
         <div class="mb-4 space-y-8">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="username" type="text">
             Usuario
