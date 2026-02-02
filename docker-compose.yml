@@ -18,9 +18,9 @@ services:
       - FLASK_ENV=production
       - FIREBASE_CONFIG=/app/config/firebase/serviceAccountKey.json
     volumes:
-      - ./server:/app/server
-      - ./Client/templates:/app/Client/templates
-      - client_assets:/app/Client/static
+      - ./server:/app
+      - ./Client/templates:/Client/templates
+      - client_assets:/Client/static
     restart: always
 
 volumes:
