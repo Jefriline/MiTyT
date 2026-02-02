@@ -7,18 +7,24 @@ Definir en un archivo `.env` en la **raíz del proyecto** (carpeta que contiene 
 | Variable      | Descripcion |
 |---------------|-------------|
 | `PORT`        | Puerto del servidor (ej: `5000`). Si no se define, se usa `5000`. |
-| `SECRET_KEY`  | Clave secreta usada por Flask para firmar la sesión. |
-| `CORS_ORIGINS` | Origenes permitidos para CORS. Si no se define, se usa `*`. En produccion  (ej: `https://miapp.com` o varias separadas por coma: `https://miapp.com,https://www.miapp.com`). |
+| `SECRET_KEY`  | Clave secreta usada por Flask para firmar la sesión. En producción usar un valor aleatorio largo (ej: `python -c "import secrets; print(secrets.token_hex())"`). |
+| `CORS_ORIGINS` | Origenes permitidos para CORS. Si no se define, se usa `*`. En producción: `https://tu-dominio.com` o varios separados por coma. |
+| `FIREBASE_CONFIG_JSON` | (Opcional) JSON completo de Firebase como texto. Si se define, no se usa el archivo. Útil en Render y entornos sin archivos. |
+| `FIREBASE_CONFIG` | (Opcional) Ruta al archivo JSON de Firebase. Si no se define y tampoco `FIREBASE_CONFIG_JSON`, se usa `config-firebase.json` en la carpeta del script. |
 
-
+**Dónde definir:** `.env` en la raíz del proyecto o en `server/`. Con docker-compose se usa `server/.env` si existe.
 
 ---
 
-## Archivo JSON de configuracion (Firebase)
+## Configuracion Firebase
 
-**Donde crearlo:** `server/config/firebase/config-firebase.json`
+**Opción A – Archivo local (desarrollo / Docker con volumen):**
 
-El servidor usa Pyrebase y lee la config desde ese archivo. Sin el archivo, la app falla al importar Firebase.
+Crear `server/config/firebase/config-firebase.json` con la config de tu proyecto Firebase.
+
+**Opción B – Variable de entorno (Render, etc.):**
+
+Definir `FIREBASE_CONFIG_JSON` con el **contenido completo** del JSON (una sola línea o multilínea). El servidor lo usa en lugar del archivo.
 
 **Estructura del JSON** (claves requeridas):
 

@@ -4,14 +4,28 @@ import os
 import pyrebase
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
-PATH_TO_JSON = os.path.join(_DIR, "config-firebase.json")
+DEFAULT_PATH_TO_JSON = os.path.join(_DIR, "config-firebase.json")
+
+
+def _load_config() -> dict:
+    json_from_env = os.getenv("FIREBASE_CONFIG_JSON")
+    if json_from_env and json_from_env.strip():
+        return json.loads(json_from_env)
+
+    path_from_env = os.getenv("FIREBASE_CONFIG")
+    path_to_json = path_from_env if path_from_env else DEFAULT_PATH_TO_JSON
+    if not os.path.exists(path_to_json):
+        raise FileNotFoundError(
+            f"No se encontro el JSON de credenciales. "
+            f"Define FIREBASE_CONFIG_JSON (JSON completo) o FIREBASE_CONFIG (ruta al archivo), "
+            f"o coloca config-firebase.json en: {DEFAULT_PATH_TO_JSON}"
+        )
+    with open(path_to_json, encoding="utf-8") as file:
+        return json.load(file)
 
 
 def initialize_firebase():
-    if not os.path.exists(PATH_TO_JSON):
-        raise FileNotFoundError(f"No se encontro el JSON de credenciales en: {PATH_TO_JSON}")
-    with open(PATH_TO_JSON, encoding="utf-8") as file:
-        config = json.load(file)
+    config = _load_config()
     database_url = config.get("databaseURL", "")
     if database_url.endswith("/"):
         config["databaseURL"] = database_url.rstrip("/")
