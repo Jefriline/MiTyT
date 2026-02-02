@@ -1,7 +1,10 @@
 from flask import session
+from werkzeug.security import generate_password_hash
 
+from dtos.user_dto.admin_dto import AdminLoginDTO
 from dtos.user_dto.user_upload_dto import UserUploadResponseDTO
 from repositories.user_repository.user_repository import UserRepository
+from utils.auth.normalize_email import normalize_email_key
 from utils.excel_aprendiz.parser import parse_excel_to_aprendices
 
 
@@ -30,16 +33,26 @@ class UserService:
             warnings=warnings,
         )
 
-    def login_user(self, username: str, password: str) -> bool:
-        if username == "admin@mityt.com" and password == "admin123":
-            session['login_user'] = {
-                "username": username,
-                "role": "admin"
-            }
-            return True
-        
-        print("Credenciales incorrectas")
-        return False
+    def login_admin(self, credentials: AdminLoginDTO) -> bool:
+        email_key = normalize_email_key(credentials.email)
+        if not email_key:
+            print("Email de administrador invalido")
+            return False
+
+        password_hash = generate_password_hash(credentials.password)
+        is_valid_admin = self.repository.authenticate_admin(
+            email_key=email_key,
+            password_hash=password_hash,
+        )
+        if not is_valid_admin:
+            print("Credenciales incorrectas")
+            return False
+
+        session["login_user"] = {
+            "username": credentials.email,
+            "role": "admin",
+        }
+        return True
 
     def search_user(self, doc_number: str):
         try:
