@@ -7,7 +7,8 @@
         "tailwindcss": "^4.1.18"
     },
     "scripts": {
-        "build": "npx tailwindcss -i ./static/css/styles.css -o ./static/css/dist.css --watch"
+        "build": "npx tailwindcss -i ./static/css/styles.css -o ./static/css/dist.css --watch",
+        "build:prod": "npx tailwindcss -i ./static/css/styles.css -o ./static/css/dist.css"
     },
     "main": "index.js",
     "keywords": [],
