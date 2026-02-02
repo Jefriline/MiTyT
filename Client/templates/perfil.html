@@ -1,80 +1,133 @@
 {% extends "layout.html" %}
 
-{% block title %} Perfil - Administrador {% endblock %}
+{% block title %}Perfil - Administrador{% endblock %}
 
 {% block content %}
-<div class="flex flex-col items-center justify-center min-h-96 py-12">
-    <div class="text-center mb-12">
-      <h1 class="text-5xl font-bold text-gray-900 mb-4">Perfil de Administrador</h1>
-      <p class="text-xl text-gray-600">Gestiona la información y configura las opciones del sistema</p>
+<div class="flex flex-col items-center min-h-96 py-8">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Panel de administrador</h1>
+      <p class="text-gray-600">Tu tarea principal es cargar y actualizar aprendices.</p>
     </div>
 
-    <div class="w-full max-w-md">
-        <section class="bg-white shadow-lg rounded-lg px-7 pt-6 pb-8 mb-4 py-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Información del Perfil</h2>
-            <div>
-                <h3 class="text-lg font-semibold text-gray-700">Rol: {{ session['login_user']['role'] }}</h3>
-                <h3 class="text-lg font-semibold text-gray-700">Correo Electrónico: {{ session['login_user']['username'] }}</h3>
+    <div class="w-full max-w-2xl">
+        <section class="bg-white border border-gray-200 rounded-lg shadow-sm mb-6">
+            <div class="border-b border-gray-200 px-5 py-4">
+                <h2 class="text-lg font-bold text-gray-900">Cargar aprendices (Excel)</h2>
+                <p class="text-sm text-gray-600 mt-1">Este archivo creará o actualizará aprendices en el sistema. Los datos se validan automáticamente.</p>
+                <p class="text-xs text-gray-500 mt-1">Solo archivos .xlsx, máximo 20 MB.</p>
             </div>
-        </section>
-        <section class="bg-white shadow-lg rounded-lg px-7 pt-6 pb-8 mb-4">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Cargar aprendices (Excel)</h2>
-            <div id="upload-message" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
-            <form id="upload-form" action="/users/upload" method="POST" enctype="multipart/form-data" class="space-y-4">
-                <input type="file" name="file" accept=".xlsx" required class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#39A900] file:text-white hover:file:bg-[#2d8500]" />
-                <button type="submit" id="upload-btn" class="w-full py-2 px-4 rounded-lg font-semibold bg-[#39A900] text-white hover:bg-[#2d8500]">
-                    Subir archivo
-                </button>
-            </form>
-            <div id="upload-spinner" class="hidden fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-                <div class="bg-white rounded-xl p-8 flex flex-col items-center gap-4 shadow-xl">
-                    <div class="w-12 h-12 border-4 border-[#39A900] border-t-transparent rounded-full animate-spin"></div>
-                    <p class="text-gray-700 font-medium">Subiendo archivo...</p>
+            <div class="p-5">
+                <div id="upload-success-block" class="hidden text-center py-8 px-4">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#39A900] text-white text-3xl mb-4" aria-hidden="true">&#10003;</div>
+                    <p class="text-xl font-bold text-gray-900 mb-1">Carga finalizada correctamente</p>
+                    <p id="upload-success-detail" class="text-gray-600 mb-6"></p>
+                    <p class="text-sm text-gray-500 mb-4">Puedes salir de esta página o cargar un nuevo archivo.</p>
+                    <button type="button" id="upload-another-btn" class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg font-medium border-2 border-[#39A900] text-[#39A900] hover:bg-[#39A900] hover:text-white transition">
+                        Cargar otro archivo
+                    </button>
+                </div>
+                <div id="upload-form-block">
+                    <div id="upload-message" class="hidden mb-4 p-4 rounded-lg text-sm border"></div>
+                    <form id="upload-form" action="/users/upload" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 transition-colors hover:border-gray-400 focus-within:border-[#39A900] focus-within:bg-gray-50">
+                            <label class="flex flex-col sm:flex-row sm:items-center gap-3 cursor-pointer">
+                                <span class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-semibold text-white bg-[#39A900] hover:bg-[#2d8500] transition shrink-0 text-sm">
+                                    Seleccionar archivo
+                                </span>
+                                <span id="file-name" class="text-sm text-gray-500 truncate">Ningún archivo seleccionado</span>
+                                <input type="file" name="file" accept=".xlsx" required class="sr-only" id="file-input" />
+                            </label>
+                        </div>
+                        <button type="submit" id="upload-btn" class="w-full py-3 px-4 rounded-lg font-semibold text-white bg-[#39A900] hover:bg-[#2d8500] transition border border-[#2d8500] disabled:opacity-60 disabled:cursor-not-allowed">
+                            Subir archivo
+                        </button>
+                    </form>
                 </div>
             </div>
         </section>
+
+        <section class="bg-white border border-gray-200 rounded-lg shadow-sm px-5 py-4">
+            <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Información de la sesión</h2>
+            <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600">
+                <span><strong class="text-gray-800">Rol:</strong> {{ session['login_user']['role'] }}</span>
+                <span><strong class="text-gray-800">Correo:</strong> {{ session['login_user']['username'] }}</span>
+            </div>
+        </section>
+
+        <div id="upload-spinner" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div class="bg-white border border-gray-200 rounded-lg p-8 flex flex-col items-center gap-4 shadow-lg">
+                <div class="w-12 h-12 border-4 border-[#39A900] border-t-transparent rounded-full animate-spin"></div>
+                <p class="text-gray-700 font-medium">Subiendo archivo...</p>
+            </div>
+        </div>
         <script>
-            document.getElementById("upload-form").addEventListener("submit", function (e) {
-                e.preventDefault();
-                var form = this;
-                var spinner = document.getElementById("upload-spinner");
-                var messageEl = document.getElementById("upload-message");
-                var btn = document.getElementById("upload-btn");
-                messageEl.classList.add("hidden");
-                spinner.classList.remove("hidden");
-                btn.disabled = true;
-                fetch(form.action, { method: "POST", body: new FormData(form) })
-                    .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
-                    .then(function (result) {
-                        spinner.classList.add("hidden");
-                        btn.disabled = false;
-                        messageEl.classList.remove("hidden");
-                        var data = result.data;
-                        if (!result.ok && data.error) {
-                            messageEl.className = "mb-4 p-3 rounded-lg text-sm bg-red-100 text-red-800 border border-red-300";
-                            messageEl.textContent = data.error;
-                            return;
-                        }
-                        if (data.errors && data.errors.length > 0) {
-                            messageEl.className = "mb-4 p-3 rounded-lg text-sm bg-amber-100 text-amber-800 border border-amber-300";
-                            messageEl.textContent = "Errores: " + data.errors.slice(0, 3).join("; ") + (data.errors.length > 3 ? " (" + data.errors.length + " en total)" : "");
-                        } else {
-                            messageEl.className = "mb-4 p-3 rounded-lg text-sm bg-green-100 text-green-800 border border-green-300";
-                            var msg = "Procesados: " + (data.inserted_count + data.updated_count) + " de " + data.total_rows + " filas.";
-                            if (data.warnings && data.warnings.length > 0) {
-                                msg += " Advertencias: " + data.warnings.length + ".";
-                            }
-                            messageEl.textContent = msg;
-                        }
-                    })
-                    .catch(function () {
-                        spinner.classList.add("hidden");
-                        btn.disabled = false;
-                        messageEl.classList.remove("hidden");
-                        messageEl.className = "mb-4 p-3 rounded-lg text-sm bg-red-100 text-red-800 border border-red-300";
-                        messageEl.textContent = "Error al subir. Intente de nuevo.";
+            (function () {
+                var fileInput = document.getElementById("file-input");
+                var fileNameEl = document.getElementById("file-name");
+                if (fileInput && fileNameEl) {
+                    fileInput.addEventListener("change", function () {
+                        var name = this.files && this.files[0] ? this.files[0].name : "Ningún archivo seleccionado";
+                        fileNameEl.textContent = name;
+                        fileNameEl.classList.toggle("text-gray-500", name === "Ningún archivo seleccionado");
+                        fileNameEl.classList.toggle("text-gray-800", name !== "Ningún archivo seleccionado");
                     });
-            });
+                }
+            })();
+            (function () {
+                var form = document.getElementById("upload-form");
+                var formBlock = document.getElementById("upload-form-block");
+                var successBlock = document.getElementById("upload-success-block");
+                var successDetail = document.getElementById("upload-success-detail");
+                var messageEl = document.getElementById("upload-message");
+                var spinner = document.getElementById("upload-spinner");
+                var btn = document.getElementById("upload-btn");
+                var fileInput = document.getElementById("file-input");
+                document.getElementById("upload-another-btn").addEventListener("click", function () {
+                    successBlock.classList.add("hidden");
+                    formBlock.classList.remove("hidden");
+                    messageEl.classList.add("hidden");
+                    if (fileInput) { fileInput.value = ""; }
+                    if (document.getElementById("file-name")) { document.getElementById("file-name").textContent = "Ningún archivo seleccionado"; }
+                });
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    messageEl.classList.add("hidden");
+                    spinner.classList.remove("hidden");
+                    btn.disabled = true;
+                    fetch(form.action, { method: "POST", body: new FormData(form) })
+                        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+                        .then(function (result) {
+                            spinner.classList.add("hidden");
+                            btn.disabled = false;
+                            var data = result.data;
+                            if (!result.ok && data.error) {
+                                messageEl.classList.remove("hidden");
+                                messageEl.className = "mb-4 p-4 rounded-lg text-sm bg-red-50 text-red-800 border border-red-200";
+                                messageEl.textContent = data.error;
+                                return;
+                            }
+                            if (data.errors && data.errors.length > 0) {
+                                messageEl.classList.remove("hidden");
+                                messageEl.className = "mb-4 p-4 rounded-lg text-sm bg-amber-50 text-amber-800 border border-amber-200";
+                                messageEl.textContent = "Errores: " + data.errors.slice(0, 3).join("; ") + (data.errors.length > 3 ? " (" + data.errors.length + " en total). Revisa el archivo y vuelve a intentar." : "");
+                                return;
+                            }
+                            var total = (data.inserted_count || 0) + (data.updated_count || 0);
+                            var totalRows = data.total_rows || 0;
+                            var warnCount = (data.warnings && data.warnings.length) || 0;
+                            successDetail.textContent = "Se procesaron " + total + " de " + totalRows + " aprendices sin errores." + (warnCount > 0 ? " " + warnCount + " advertencia(s)." : "");
+                            formBlock.classList.add("hidden");
+                            successBlock.classList.remove("hidden");
+                        })
+                        .catch(function () {
+                            spinner.classList.add("hidden");
+                            btn.disabled = false;
+                            messageEl.classList.remove("hidden");
+                            messageEl.className = "mb-4 p-4 rounded-lg text-sm bg-red-50 text-red-800 border border-red-200";
+                            messageEl.textContent = "Error al subir. Intente de nuevo.";
+                        });
+                });
+            })();
         </script>
     </div>
 </div>
