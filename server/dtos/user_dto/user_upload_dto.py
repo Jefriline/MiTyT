@@ -22,7 +22,7 @@ class InformacionConvocatorioDTO(BaseModel):
 class AprendizCreateDTO(BaseModel):
     Nombre: str
     TipoDocumento: str
-    nro_documento: str = Field(alias="Nro Documento")
+    nro_documento: str = Field(alias="Nro-Documento")
     Correo: str
     InformacionFormacion: InformacionFormacionDTO
     InformacionConvocatorio: InformacionConvocatorioDTO

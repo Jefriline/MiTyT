@@ -50,4 +50,4 @@ def logout():
 
 @users_bp.route("/search", methods=["POST"])
 def searchUsers():
-    return search_controller.handle_search()     
+    return search_controller.handle_search()

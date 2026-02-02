@@ -5,7 +5,8 @@ from openpyxl import load_workbook
 NORMALIZADO_A_CANONICO: dict[str, str] = {
     "nombre": "Nombre",
     "tipodocumento": "TipoDocumento",
-    "nrodocumento": "Nro Documento",
+    "nrodocumento": "Nro-Documento",
+    "nro-documento": "Nro-Documento",
     "correo": "Correo",
     "regional": "Regional",
     "centroformacion": "CentroFormacion",
@@ -35,7 +36,7 @@ PRIMARY_NORM_POR_CANONICO = _primary_norm_por_canonico()
 CANONICO_A_INDICES_KEY: dict[str, str] = {
     "Nombre": "nombre",
     "TipoDocumento": "tipodocumento",
-    "Nro Documento": "nrodocumento",
+    "Nro-Documento": "nrodocumento",
     "Correo": "correo",
     "Regional": "regional",
     "CentroFormacion": "centroformacion",
@@ -55,7 +56,7 @@ CAMPOS_OBLIGATORIOS_NORMALIZADOS = ("nrodocumento", "correo", "ficha", "estadoco
 
 MENSAJE_HEADERS_FALTANTES = (
     "La primera fila debe tener columnas que correspondan (ignorando mayusculas y espacios) a: "
-    "Nombre, TipoDocumento, Nro Documento, Correo, Regional, CentroFormacion, CorreoContacto, "
+    "Nombre, TipoDocumento, Nro-Documento, Correo, Regional, CentroFormacion, CorreoContacto, "
     "Ficha, Programa, Modalidad, Avance, Convocatoria, EstadoTerminos, EstadoConvocatoria, "
     "ResponablePago, Observaciones."
 )
@@ -137,7 +138,7 @@ def _fila_a_aprendiz(row: tuple, indices: dict[str, int]) -> dict | None:
     return {
         "Nombre": valor("nombre"),
         "TipoDocumento": valor("tipodocumento"),
-        "Nro Documento": valor("nrodocumento"),
+        "Nro-Documento": valor("nrodocumento"),
         "Correo": valor("correo"),
         "InformacionFormacion": informacion_formacion,
         "InformacionConvocatorio": informacion_convocatorio,
@@ -171,7 +172,7 @@ def parse_excel_to_aprendices(file_stream: bytes) -> tuple[list[dict], list[str]
         aprendiz = _fila_a_aprendiz(row, indices)
         if aprendiz is None:
             errors.append(
-                f"Fila {row_index}: faltan Nro Documento, Correo, Ficha o EstadoConvocatoria"
+                f"Fila {row_index}: faltan Nro-Documento, Correo, Ficha o EstadoConvocatoria"
             )
             continue
         rows_to_insert.append(aprendiz)

@@ -1,54 +1,71 @@
 <!doctype html>
 <html lang="es">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}MiTyT{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logoSena.png') }}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  </head>
+</head>
 <body class="flex flex-col min-h-screen bg-gray-50">
-  <nav class="bg-white shadow-md flex-none">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-14">
-        <div class="flex-shrink-0">
-          <a href="/" class="text-2xl font-bold text-[#39A900]">Consulta de información</a>
+
+    <nav class="bg-white shadow-md flex-none">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <img src="{{ url_for('static', filename='img/logoSena.png') }}" alt="SENA Logo" class="h-10 w-10 object-contain">
+                    <a href="/" class="text-xl md:text-2xl font-bold text-gray-800">
+                        Bienvenido a <span class="text-[#39A900]">MiTyT</span>
+                    </a>
+                </div>
+
+                <ul class="flex items-center space-x-6">
+                    <li><a href="/" class="text-gray-700 hover:text-[#39A900] transition font-medium">Inicio</a></li>
+                    {% if session.get('login_user') %}
+                        <li><a href="/users/perfil" class="text-gray-700 hover:text-[#39A900] transition font-medium">Perfil</a></li>
+                        <li><a href="/users/logout" class="text-gray-700 hover:text-[#39A900] transition font-medium">Cerrar sesión</a></li>
+                    {% else %}
+                        <li><a href="/users/login" class="text-gray-700 hover:text-[#39A900] transition font-medium">Iniciar sesión</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-        <ul class="flex h-auto w-[30%] px-4 justify-center items-center space-x-6">
-          <li class="flex w-full justify-around items-center">
-            <a href="/" class="text-gray-700 hover:text-[#39A900] transition">Inicio</a>
-            
-          {% if session.get('login_user') %}
-            <a href="/users/perfil" class="ml-4 text-gray-700 hover:text-[#39A900] transition">Perfil</a>
-            <a href="/users/logout" class="ml-4 text-gray-700 hover:text-[#39A900] transition">Cerrar sesión</a>
-          {%else %}
-            <a href="/users/login" class="text-gray-700 hover:text-[#39A900] transition">Iniciar sesión</a>
-          {% endif %}
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+    </nav>
 
-  <main class="flex-grow flex flex-col"> 
-    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-5 py-5 flex-grow flex flex-col">
-      {% block content %}
-      {% endblock %}
-    </div>
-  </main>
+    <main class="flex-grow flex flex-col"> 
+        <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-5 py-8 flex-grow flex flex-col">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
 
-  <footer class="bg-[#39A900] text-gray-300 ">
-    <div class="flex max-w-6xl mx-auto px-4 sm:px-6 lg:px-2 py-1 items-center justify-center">
-      <div class="flex w-[50%] flex-col items-center justify-center space-y-2">
-          <ul class="flex space-x-4 py-2 text-sm items-center justify-center">
-            <li><a href="https://www.icfes.gov.co/" class="hover:text-white transition">Acceso a Icfes</a></li>
-            <li><a href="/Ayuda" class="hover:text-white transition">Ayuda en Incripción </a></li>
-          </ul>
-        <hr class="w-full border-gray-600 " />
-        <div class="">
-           <p class="text-center text-sm">&copy; 2026. Todos los derechos reservados.</p>
-        </div>  
-      </div>
-    </div>
-  </footer>
+    <footer class="bg-[#39A900] text-white">
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                
+                <div class="flex flex-col space-y-4 text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start gap-2">
+                        <img src="{{ url_for('static', filename='img/logoSena.png') }}" alt="SENA" class="h-6 w-6 brightness-0 invert">
+                        <span class="font-bold tracking-wider">PROYECTO MiTyT</span>
+                    </div>
+                    <ul class="flex flex-wrap justify-center md:justify-start gap-6 text-sm">
+                        <li><a href="https://www.icfes.gov.co/" target="_blank" class="hover:text-gray-200 transition">Acceso a Icfes</a></li>
+                        <li><a href="/Help/video" class="hover:text-gray-200 transition">Ayuda en Inscripción</a></li>
+                    </ul>
+                    <p class="text-xs opacity-80">&copy; 2026. Todos los derechos reservados.</p>
+                </div>
+
+                <div class="text-xs text-center md:text-right border-t md:border-t-0 md:border-l border-green-400 pt-4 md:pt-0 md:pl-8 opacity-90">
+                    <p class="font-bold uppercase mb-2">Aviso de Uso Académico</p>
+                    <p class="leading-relaxed">
+                        Este sitio web ha sido desarrollado con fines estrictamente <strong>académicos y de orientación</strong> para los aprendices. 
+                        Los videos tutoriales externos son propiedad de sus respectivos autores en YouTube. 
+                        MiTyT no reclama autoría sobre recursos de terceros ni realiza uso comercial de los mismos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>

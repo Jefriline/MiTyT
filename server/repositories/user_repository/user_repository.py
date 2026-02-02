@@ -27,7 +27,7 @@ class UserRepository:
         term = doc_number.strip()
         snapshot = (
             db.child("users")
-            .order_by_child("Nro Documento")
+            .order_by_child("Nro-Documento")
             .equal_to(term)
             .get()
         )
