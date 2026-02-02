@@ -38,4 +38,5 @@ USER flaskuser
 EXPOSE 5000
 
 # Comandos de ejecución
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "server:app", "--workers", "4", "--log-level", "debug"]
+# Workers: 8 para VPS Standard D4s v3 (4 vCPU, 16 GiB). Regla: 2*CPU para I/O, hasta 2*CPU+1.
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "server:app", "--workers", "8", "--log-level", "debug"]
