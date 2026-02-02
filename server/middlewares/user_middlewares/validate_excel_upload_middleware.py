@@ -3,6 +3,7 @@ from functools import wraps
 from flask import request, jsonify
 
 ALLOWED_EXTENSIONS = {"xlsx"}
+MAX_FILE_SIZE_MB = 20
 
 
 def _allowed_file(filename: str) -> bool:
@@ -22,5 +23,13 @@ def validate_excel_upload(fn):
             return jsonify({"error": "No se selecciono ningun archivo"}), 400
         if not _allowed_file(file.filename):
             return jsonify({"error": "Extension no permitida. Use .xlsx"}), 400
+        file.seek(0, 2)
+        size_bytes = file.tell()
+        file.seek(0)
+        if size_bytes > MAX_FILE_SIZE_MB * 1024 * 1024:
+            return jsonify({
+                "error": f"El archivo supera el limite de {MAX_FILE_SIZE_MB} MB. "
+                         f"Comprima o divida el archivo."
+            }), 400
         return fn(*args, **kwargs)
     return wrapper

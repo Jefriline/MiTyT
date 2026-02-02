@@ -4,9 +4,11 @@
 
 Definir en un archivo `.env` en la **raíz del proyecto** (carpeta que contiene `server/`):
 
-| Variable | Descripcion |
-|----------|-------------|
-| `PORT`   | Puerto del servidor (ej: `5000`). Si no se define, se usa `5000`. |
+| Variable      | Descripcion |
+|---------------|-------------|
+| `PORT`        | Puerto del servidor (ej: `5000`). Si no se define, se usa `5000`. |
+| `SECRET_KEY`  | Clave secreta usada por Flask para firmar la sesión. Debe ser un string aleatorio largo. |
+
 
 
 ---

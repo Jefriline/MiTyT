@@ -16,8 +16,10 @@ class UsersUploadController:
 
         response_body = {
             "inserted_count": result_dto.inserted_count,
+            "updated_count": result_dto.updated_count,
             "total_rows": result_dto.total_rows,
             "errors": result_dto.errors,
+            "warnings": result_dto.warnings,
         }
         return jsonify(response_body), 201
     

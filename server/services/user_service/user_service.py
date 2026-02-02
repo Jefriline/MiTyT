@@ -1,50 +1,64 @@
-from io import BytesIO
 from flask import session
-from openpyxl import load_workbook
+from werkzeug.security import check_password_hash
 
+from dtos.user_dto.admin_dto import AdminLoginDTO
 from dtos.user_dto.user_upload_dto import UserUploadResponseDTO
 from repositories.user_repository.user_repository import UserRepository
+from utils.auth.normalize_email import normalize_email_key
 from utils.excel_aprendiz.parser import parse_excel_to_aprendices
 
 
 class UserService:
-
     def __init__(self) -> None:
         self.repository = UserRepository()
 
     def upload_excel(self, file_stream: bytes, filename: str) -> UserUploadResponseDTO:
-        rows_to_insert, errors = parse_excel_to_aprendices(file_stream)
+        rows_to_upsert, errors, warnings = parse_excel_to_aprendices(file_stream)
 
-        if not rows_to_insert:
+        if not rows_to_upsert:
             return UserUploadResponseDTO(
                 inserted_count=0,
+                updated_count=0,
                 total_rows=0,
                 errors=errors if errors else ["No hay filas validas para insertar"],
+                warnings=warnings,
             )
 
-        inserted_count = self.repository.insert_many(rows_to_insert)
+        total_processed, _ = self.repository.upsert_many(rows_to_upsert)
         return UserUploadResponseDTO(
-            inserted_count=inserted_count,
-            total_rows=len(rows_to_insert),
+            inserted_count=total_processed,
+            updated_count=0,
+            total_rows=len(rows_to_upsert),
             errors=errors,
+            warnings=warnings,
         )
 
-    def login_user(self, username: str, password: str) -> bool:
-        if username == "admin@mityt.com" and password == "admin123":
-            session['login_user'] = {
-                "username": username,
-                "role": "admin"
-            }
-            return True
-        
-        print("Credenciales incorrectas")
-        return False
+    def login_admin(self, credentials: AdminLoginDTO) -> bool:
+        email_key = normalize_email_key(credentials.email)
+        if not email_key:
+            print("Email de administrador invalido")
+            return False
+
+        stored_password_hash = self.repository.get_admin_password_hash(email_key)
+        if not stored_password_hash:
+            print("Credenciales incorrectas")
+            return False
+
+        if not check_password_hash(stored_password_hash, credentials.password):
+            print("Credenciales incorrectas")
+            return False
+
+        session["login_user"] = {
+            "username": credentials.email,
+            "role": "admin",
+        }
+        return True
 
     def search_user(self, doc_number: str):
         try:
             user = self.repository.find_by_document(doc_number)
             if not user:
-                return {"error": "User not found", "user": None}
+                return {"error": "Usuario no encontrado", "user": None}
             return {"user": user, "error": None}
         except Exception as e:
             print(f"Service Error: {e}")
