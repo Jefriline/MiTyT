@@ -11,7 +11,8 @@ load_dotenv()
 app = Flask(__name__, template_folder="../Client/templates")
 app.secret_key = os.getenv("SECRET_KEY")
 
-CORS_ORIGINS = "*"
+_raw_cors = (os.getenv("CORS_ORIGINS") or "*").strip()
+CORS_ORIGINS = "*" if _raw_cors == "*" else [origin.strip() for origin in _raw_cors.split(",")]
 CORS(app, origins=CORS_ORIGINS, supports_credentials=False)
 
 

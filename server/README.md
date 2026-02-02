@@ -7,7 +7,8 @@ Definir en un archivo `.env` en la **raíz del proyecto** (carpeta que contiene 
 | Variable      | Descripcion |
 |---------------|-------------|
 | `PORT`        | Puerto del servidor (ej: `5000`). Si no se define, se usa `5000`. |
-| `SECRET_KEY`  | Clave secreta usada por Flask para firmar la sesión. Debe ser un string aleatorio largo. |
+| `SECRET_KEY`  | Clave secreta usada por Flask para firmar la sesión. |
+| `CORS_ORIGINS` | Origenes permitidos para CORS. Si no se define, se usa `*`. En produccion  (ej: `https://miapp.com` o varias separadas por coma: `https://miapp.com,https://www.miapp.com`). |
 
 
 
