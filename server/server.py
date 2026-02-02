@@ -9,7 +9,7 @@ from routes.user_routes.user_routes import users_bp
 load_dotenv()
 
 app = Flask(__name__, template_folder="../Client/templates")
-app.secret_key = os.getenv("SECRET_KEY", "default-secret-key")
+app.secret_key = os.getenv("SECRET_KEY")
 
 CORS_ORIGINS = "*"
 CORS(app, origins=CORS_ORIGINS, supports_credentials=False)
@@ -23,5 +23,6 @@ app.register_blueprint(users_bp)
 
 
 PORT = int(os.getenv("PORT", "5000"))
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=PORT, debug=True)
+    app.run(host="0.0.0.0", port=PORT)

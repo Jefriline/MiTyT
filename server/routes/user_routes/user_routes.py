@@ -4,7 +4,7 @@ from controllers.user_controller.users_upload import UsersUploadController
 from controllers.user_controller.users_search import UsersSearchController
 from controllers.user_controller.users_auth import ControllerAuth
 from middlewares.user_middlewares.validate_excel_upload_middleware import validate_excel_upload
-from middlewares.user_middlewares.ValidateAuth import MiddlewareAuthUser
+from middlewares.user_middlewares.ValidateAuth import MiddlewareAuthUser, require_admin_session
 from services.user_service.user_service import UserService
 
 upload_controller = UsersUploadController()
@@ -15,6 +15,7 @@ middleware_auth = MiddlewareAuthUser()
 users_bp = Blueprint('users', __name__, url_prefix='/users')
 
 @users_bp.route("/upload", methods=["POST"])
+@require_admin_session
 @validate_excel_upload
 def users_upload():
     return upload_controller.upload()

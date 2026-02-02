@@ -1,5 +1,19 @@
-from flask import request
 from functools import wraps
+
+from flask import jsonify, request, session
+
+
+def require_admin_session(func):
+    
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        login_user = session.get("login_user")
+        if not login_user or login_user.get("role") != "admin":
+            return jsonify({"error": "Solo administradores pueden subir archivos"}), 403
+        return func(*args, **kwargs)
+
+    return wrapper
+
 
 class MiddlewareAuthUser:
     def __init__(self) -> None:

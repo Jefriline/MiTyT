@@ -33,3 +33,34 @@ El servidor usa Pyrebase y lee la config desde ese archivo. Sin el archivo, la a
   "measurementId": "..."
 }
 ```
+
+---
+
+## Ejecucion
+
+**Desarrollo (desde la carpeta `server/`):**
+
+```bash
+python server.py
+```
+
+
+**Produccion con Waitress (Windows, desde la carpeta `server/`):**
+
+```bash
+waitress-serve --host=0.0.0.0 --port=5000 server:app
+```
+
+Si se ejecuta desde la raiz del proyecto (carpeta que contiene `server/`), usar en su lugar:
+
+```bash
+waitress-serve --host=0.0.0.0 --port=5000 server.server:app
+```
+
+**Produccion con Gunicorn (Linux/Docker, desde la raiz del proyecto):**
+
+```bash
+gunicorn -w 4 -b 0.0.0.0:5000 "server.server:app"
+```
+
+Gunicorn no soporta Windows; en Windows usar Waitress o `python server.py`.
