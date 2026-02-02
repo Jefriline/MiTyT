@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block title %}Ayuda - Guía de Inscripción MiTyT{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center flex-grow py-5 bg-gray-50 transition-all duration-500">
+    
+    <div class="text-center mt-4 mb-12 px-4">
+        <h1 class="text-5xl font-bold text-gray-900 mb-4">
+            Ayuda en <span class="text-[#39A900]">Inscripción</span>
+        </h1>
+        <p class="text-xl text-gray-600 max-w-2xl">
+           Hemos recopilado estos video-tutoriales para guiarte paso a paso en tu proceso de registro para las pruebas Saber TyT.
+        </p>
+    </div>
+
+    <div class="w-full max-w-5xl px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        
+        <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#39A900] hover:shadow-xl transition-shadow duration-300">
+            <h2 class="font-black text-gray-800 uppercase tracking-wider text-xl mb-2">
+                Parte 1: <span class="text-[#39A900]">Pasos Iniciales</span>
+            </h2>
+            <p class="text-gray-600 mb-6 italic">Instrucciones sobre el acceso a la plataforma y actualización de datos.</p>
+            
+            <div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-inner bg-black">
+                <iframe 
+                    class="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/gYIlEfcfn9I" 
+                    title="Tutorial de Inscripción Parte 1"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            
+            <div class="mt-4 flex justify-between items-center">
+                <a href="https://www.youtube.com/watch?v=gYIlEfcfn9I" target="_blank" class="text-sm text-[#39A900] font-bold hover:underline flex items-center gap-1">
+                    Ver en YouTube 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                </a>
+                <span class="text-xs text-gray-400 italic">Créditos: Autor vía YouTube</span>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#39A900] hover:shadow-xl transition-shadow duration-300">
+            <h2 class="font-black text-gray-800 uppercase tracking-wider text-xl mb-2">
+                Parte 2: <span class="text-[#39A900]">Registro Final</span>
+            </h2>
+            <p class="text-gray-600 mb-6 italic">Proceso de liquidación, confirmación de pago y finalización del registro.</p>
+            
+            <div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-inner bg-black">
+                <iframe 
+                    class="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/D72ukRd6Qfg" 
+                    title="Tutorial de Inscripción Parte 2"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div class="mt-4 flex justify-between items-center">
+                <a href="https://www.youtube.com/watch?v=D72ukRd6Qfg" target="_blank" class="text-sm text-[#39A900] font-bold hover:underline flex items-center gap-1">
+                    Ver en YouTube
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                </a>
+                <span class="text-xs text-gray-400 italic">Créditos: Autor vía YouTube</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-auto py-8 text-center text-gray-500">
+        <p>¿Dudas adicionales? Consulta con tu centro <span class="font-bold text-[#39A900]">SENA</span>.</p>
+    </div>
+</div>
+{% endblock %}

@@ -6,7 +6,7 @@
   <div class="flex flex-col items-center flex-grow py-5 bg-gray-20 transition-all duration-500 {{ 'justify-start' if user or error else 'mt-40' }}">
     
     <div class="text-center transition-all duration-500 {{'mt-4 mb-8' if user or error else 'mb-12' }}">
-      <h1 class="text-5xl font-bold text-gray-900 mb-4">Bienvenido a <span class="text-[#39A900]">MiTyT</span></h1>
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">Consulta de <span class="text-[#39A900]">Información TyT</span></h1>
       <p class="text-xl text-gray-600">Encuentra información sobre las pruebas TyT de forma rápida.</p>
     </div>
 
@@ -43,7 +43,8 @@
           <h2 class="font-black text-[#39A900] uppercase tracking-wider text-sm mb-4 text-xl">Datos básicos</h2>
           <div class="space-y-3">
             <p class="text-gray-600 text-sm text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Nombre:</span> {{ user.Nombre }}</p>
-            <p class="text-gray-600 text-sm text-[18px]"><span class="font-semibold text-gray-800 text-[18px]">Documento:</span> {{ user.TipoDocumento }} {{ user['Nro-Documento'] }}</p>
+            <p class="text-gray-600 text-sm text-[18px]"><span class="font-semibold text-gray-800 text-[18px]">Documento:</span> {{ user.TipoDocumento }}</p>
+            <p class="text-gray-600 text-sm text-[18px]"><span class="font-semibold text-gray-800 text-[18px]">Nro Documento:</span>  {{ user['Nro-Documento'] }}</p>
             <p class="text-gray-600 text-sm text-[18px]"><span class="font-semibold text-gray-800 text-[18px]">Email:</span> {{ user.Correo }}</p>
           </div>
         </div>
@@ -63,7 +64,10 @@
           <div class="space-y-2 text-sm text-gray-700">
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Estado:</span> {{ user.InformacionConvocatorio.EstadoConvocatoria }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Pago:</span> {{ user.InformacionConvocatorio.ResponablePago }}</p>
+            <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Estado:</span> {{ user.InformacionConvocatorio.EstadoConvocatoria }}</p>
+            <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Pago:</span> {{ user.InformacionConvocatorio.ResponablePago }}</p>
             <div class="mt-4 p-3 bg-green-50 rounded-lg text-[13px] text-green-800"> 
+              <span class="font-bold">Observaciones:</span> {{ user.InformacionConvocatorio.Observaciones }}
               <span class="font-bold">Observaciones:</span> {{ user.InformacionConvocatorio.Observaciones }}
             </div>
           </div>

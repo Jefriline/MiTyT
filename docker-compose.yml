@@ -1,0 +1,27 @@
+services:
+  client_builder:
+    build:
+      context: ./Client
+      dockerfile: Dockerfile
+    volumes:
+      - client_assets:/app/static 
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    depends_on:
+      client_builder:
+        condition: service_completed_successfully
+    ports:
+      - "80:5000"
+    environment:
+      - FLASK_ENV=production
+      - FIREBASE_CONFIG=/app/config/firebase/serviceAccountKey.json
+    volumes:
+      - ./server:/app/server
+      - ./Client/templates:/app/Client/templates
+      - client_assets:/app/Client/static
+    restart: always
+
+volumes:
+  client_assets:

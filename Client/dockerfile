@@ -1,0 +1,19 @@
+# Client/Dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copiamos package.json y instalamos tailwind
+COPY package*.json ./
+RUN npm install
+
+# Copiamos el resto de archivos del cliente (templates, static)
+COPY . .
+
+# Ejecutamos el build de tailwind
+# Esto generará el archivo en static/css/output.css
+RUN npm run build
+
+# En producción, este contenedor puede quedarse "dormido" 
+# o servir de base para que el servidor lea los archivos.
+CMD ["echo", "Assets built successfully"]

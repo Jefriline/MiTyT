@@ -4,11 +4,17 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 
 from routes.user_routes.user_routes import users_bp
+from routes.help_routes.help_routes import help_bp
 
 
 load_dotenv()
 
-app = Flask(__name__, template_folder="../Client/templates")
+base_dir = os.path.abspath(os.path.dirname(__file__))
+
+template_dir = os.path.join(base_dir, '..', 'Client', 'templates')
+static_dir = os.path.join(base_dir, "..", "Client", "static")
+
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 app.secret_key = os.getenv("SECRET_KEY")
 
 _raw_cors = (os.getenv("CORS_ORIGINS") or "*").strip()
@@ -21,6 +27,7 @@ def home():
     return render_template("index.html")
 
 app.register_blueprint(users_bp)
+app.register_blueprint(help_bp)
 
 
 PORT = int(os.getenv("PORT", "5000"))
