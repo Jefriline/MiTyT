@@ -11,23 +11,28 @@
     </div>
 
     <div class="w-full max-w-2xl px-4">
-      <form id="searchForm" action="/users/search" method="POST" class="flex gap-3 bg-white p-2 rounded-xl shadow-xl border border-gray-100">
-        <div class="flex-grow relative">
-          <input
-            type="text"
-            id="search_term"
-            name="search_term" 
-            placeholder="Introduce tu documento..."
-            class="w-full px-6 py-4 text-lg border-none rounded-lg focus:ring-2 focus:ring-[#39A900] transition"
-          />
+      <form id="searchForm" action="/users/search" method="POST" class="flex flex-col gap-3 bg-white p-2 rounded-xl shadow-xl border border-gray-100">
+        <div class="flex gap-3">
+          <div class="flex-grow relative">
+            <input
+              type="text"
+              id="search_term"
+              name="search_term"
+              placeholder="Introduce tu documento..."
+              class="w-full px-6 py-4 text-lg border-none rounded-lg focus:ring-2 focus:ring-[#39A900] transition"
+            />
+          </div>
+          <button
+            id="searchSubmitBtn"
+            type="submit"
+            class="bg-[#39A900] text-white px-8 py-4 rounded-lg hover:bg-[#2d8500] transition-all duration-300 font-bold text-lg shadow-md hover:shadow-lg transform hover:-translate-y-1"
+          >
+            Buscar
+          </button>
         </div>
-        <button
-          id="submit"
-          type="submit"
-          class="bg-[#39A900] text-white px-8 py-4 rounded-lg hover:bg-[#2d8500] transition-all duration-300 font-bold text-lg shadow-md hover:shadow-lg transform hover:-translate-y-1"
-        >
-          Buscar
-        </button>
+        {% if turnstile_site_key %}
+        <div id="turnstile-container" class="flex justify-center min-h-[70px] hidden" data-site-key="{{ turnstile_site_key|e }}"></div>
+        {% endif %}
       </form>
     </div>
 
@@ -82,4 +87,70 @@
     </div>
     {% endif %}
   </div>
+
+  {% if turnstile_site_key %}
+  <script>
+    (function() {
+      var form = document.getElementById("searchForm");
+      var container = document.getElementById("turnstile-container");
+      var siteKey = container ? (container.getAttribute("data-site-key") || "") : "";
+      var scriptLoaded = false;
+      var widgetId = null;
+      var submittingWithToken = false;
+
+      function hasTurnstileToken() {
+        var input = document.querySelector('input[name="cf-turnstile-response"]');
+        return input && input.value && input.value.length > 0;
+      }
+
+      function loadTurnstileScript(done) {
+        if (window.turnstile) {
+          scriptLoaded = true;
+          done();
+          return;
+        }
+        var script = document.createElement("script");
+        script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+        script.async = true;
+        script.onload = function() {
+          scriptLoaded = true;
+          done();
+        };
+        document.body.appendChild(script);
+      }
+
+      function submitFormWithToken(token) {
+        var existing = form.querySelector('input[name="cf-turnstile-response"]');
+        if (existing) existing.remove();
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "cf-turnstile-response";
+        input.value = token;
+        form.appendChild(input);
+        submittingWithToken = true;
+        HTMLFormElement.prototype.submit.call(form);
+      }
+
+      function renderWidget() {
+        if (!container || !window.turnstile || widgetId !== null) return;
+        container.classList.remove("hidden");
+        widgetId = turnstile.render(container, {
+          sitekey: siteKey,
+          theme: "light",
+          callback: function(token) {
+            submitFormWithToken(token);
+          }
+        });
+      }
+
+      form.addEventListener("submit", function(event) {
+        if (submittingWithToken || hasTurnstileToken()) return;
+        event.preventDefault();
+        loadTurnstileScript(function() {
+          renderWidget();
+        });
+      });
+    })();
+  </script>
+  {% endif %}
 {% endblock %}
