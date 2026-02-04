@@ -5,6 +5,7 @@ from controllers.user_controller.users_search import UsersSearchController
 from controllers.user_controller.users_auth import ControllerAuth
 from middlewares.user_middlewares.validate_excel_upload_middleware import validate_excel_upload
 from middlewares.user_middlewares.ValidateAuth import MiddlewareAuthUser, require_admin_session
+from middlewares.user_middlewares.validate_turnstile_middleware import validate_turnstile
 from services.user_service.user_service import UserService
 
 upload_controller = UsersUploadController()
@@ -50,5 +51,6 @@ def logout():
     return redirect("/")
 
 @users_bp.route("/search", methods=["POST"])
-def searchUsers():
+@validate_turnstile
+def search_users():
     return search_controller.handle_search()
