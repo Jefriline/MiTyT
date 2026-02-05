@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{& block title %}Ayuda - Guía de Inscripción a las pruebas Saber TyT{% endblock %}
+
+{% block content %
+<div class="">
+    <div class="text-center mt-4 mb-12 px-4">
+        <h1 class="text-5xl font-bold text-gray-900 mb-4">
+            Guía de <span class="text-[#39A900]">Inscripción</span> a las pruebas Saber TyT
+        </h1>
+        <p class="text-xl text-gray-600 max-w-2xl">
+           Sigue estos pasos detallados para completar tu inscripción en las pruebas Saber TyT de manera exitosa.
+        </p>
+    </div>
+    <div class="w-full max-w-5xl px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        
+        <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#39A900] hover:shadow-xl transition-shadow duration-300">
+            <h2 class="font-black text-gray-800 uppercase tracking-wider text-xl mb-2">
+                Paso 1: <span class="text-[#39A900]">Activación de las credenciales de acceso</span>
+            </h2>
+            <p class="text-gray-600">
+                Para activar la cuenta de Icfes, debemos tener las credenciales que nos brinda el icfes
+                por medio de un correo electrónico, normalmente el correo se llama noresponderprisma@icfes ..., en el se encuentra la 
+                información necesaria para activar la cuenta, como el usuario y la contraseña temporal. 
+            </p>
+            <p c lass="text-gray-600 mt-4">
+                Una vez tengamos las credenciales, debemos ingresar a la página oficial del icfes 
+                <a href="https://prisma.icfes.gov.co/" target="_blank" class="text-[#39A900] font-bold hover:underline">https://prisma.icfes.gov.co/</a>, 
+                y en la sección de inicio de sesión, ingresamos el usuario y la contraseña temporal que nos brindaron.
+            </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#39A900] hover:shadow-xl transition-shadow duration-300">
+            <h2 class="font-black text-gray-800 uppercase tracking-wider text-xl mb-2">
+                Paso 2: <span class="text-[#39A900]">Actualización de datos personales</span>
+            </h2>
+            <p class="text-gray-600">
+                Después de iniciar sesión por primera vez, el sistema nos pedirá actualizar la contraseña 
+                temporal por una nueva contraseña segura. Además, es importante revisar la información personal,
+                esta misma información es la que se utilizará para la inscripción a las pruebas Saber TyT, 
+                por lo que debemos asegurarnos de que todos los datos estén correctos.
+            </p>
+            <img src="{{ url_for('static', filename='images/guide_update_password.png') }}" alt="Actualización de contraseña" class="w-full h-auto mt-4 rounded-lg shadow-md" />
+            <p class="text-gray-600 mt-4">
+                Una vez actualizadamos la contraseña y verifiquemos los datos personales, podemos proceder a hacer la inscripción a las pruebas Saber TyT.
+            </p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#39A900] hover:shadow-xl transition-shadow duration-300 md:col-span-2">
+                <h2 class="font-black text-gray-800 uppercase tracking-wider text-xl mb-2">
+                    Paso 3: <span class="text-[#39A900]">Inscripción a las pruebas Saber TyT</span>
+                </h2>
+                <p class="text-gray-600 mt-4">
+                    Para inscribirse a las pruebas Saber TyT, debemos acceder al sistema de inscripción del Icfes. 
+                    En la sección de "Inscripción a pruebas Saber TyT", seleccionamos la prueba que deseamos inscribirnos. 
+                    Luego, Llenamos todos los formularios con los campos requeridos, como datos personales, información académica y selección de sede.
+                </p>
+                <p class="text-gray-600 mt-4">
+                    Después de completar los formularios, revisamos le damos a "Continuar" para proceder al pago de la inscripción o la descarga del recibo de pago,    
+                    según las indicaciones del Icfes y condición del aprendiz.
+                </p>
+        </div>
+            
+    </div>
+
+</div>
+
+{% endblock %}}

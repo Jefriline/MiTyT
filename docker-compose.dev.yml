@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: dockerfile.dev
+    container_name: flask_dev
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app            
+      - ./client/templates:/Client/templates 
+      - ./client/static:/Client/static        
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - dev-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: dockerfile.dev
+    container_name: tailwind_watcher
+    volumes:
+      - ./client:/Client   
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge

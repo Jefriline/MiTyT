@@ -24,7 +24,7 @@ CORS(app, origins=CORS_ORIGINS, supports_credentials=False)
 
 @app.route("/")
 def home():
-    turnstile_site_key = os.getenv("TURNSTILE_SITE_KEY", "")
+    turnstile_site_key = os.getenv("TURNSTILE_SITE_KEY", "").strip()
     return render_template("index.html", turnstile_site_key=turnstile_site_key)
 
 app.register_blueprint(users_bp)
