@@ -30,6 +30,7 @@ NORMALIZADO_A_CANONICO: dict[str, str] = {
     "responsabledepago": "ResponsablePago",
     "usuarioprisma": "UsuarioPrisma",
     "contraseñaprisma": "ContrasenaPRISMA",
+    "contraseñaaprisma": "ContrasenaPRISMA",
     "correodelcentroformación": "CorreoCentroFormacion",
     "correodelcentroformacion": "CorreoCentroFormacion",
 }
@@ -98,5 +99,5 @@ MENSAJE_HEADERS_FALTANTES = (
     "Correo del centro formación."
 )
 
-MAX_FILAS_EXCEL = 3500
+MAX_FILAS_EXCEL = 5000
 BATCH_SIZE_UPLOAD = 250

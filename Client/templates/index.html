@@ -6,8 +6,8 @@
   <div class="flex flex-col items-center flex-grow py-5 bg-gray-20 transition-all duration-500 {{ 'justify-start' if user or error else 'mt-40' }}">
     
     <div class="text-center transition-all duration-500 {{'mt-4 mb-8' if user or error else 'mb-12' }}">
-      <h1 class="text-5xl font-bold text-gray-900 mb-4">Consulta de <span class="text-[#39A900]">Información TyT</span></h1>
-      <p class="text-xl text-gray-600">Encuentra información sobre las pruebas TyT de forma rápida.</p>
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">Consulta de convocatoria pruebas <span class="text-[#39A900]"> TyT</span></h1>
+      <p class="text-xl text-gray-600">Encuentra información sobre las convocatorias TyT del centro de Comercio y Turismo.</p>
     </div>
 
     <div class="w-full max-w-2xl px-4">
@@ -59,7 +59,6 @@
           <div class="space-y-2 text-sm">
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Regional:</span> {{ user.InformacionFormacion.Regional }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Centro:</span> {{ user.InformacionFormacion.CentroFormacion }}</p>
-            <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Convocatoria:</span> {{ user.InformacionFormacion.Convocatoria or '-' }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Ficha:</span> {{ user.InformacionFormacion.Ficha }}</p>
             <p class="mt-2 text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Programa:</span> {{ user.InformacionFormacion.Programa }}</p>
           </div>
@@ -69,7 +68,11 @@
           <h2 class="font-black text-[#39A900] uppercase tracking-wider text-sm mb-4 text-xl">Convocatoria</h2>
           <div class="space-y-2 text-sm text-gray-700">
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Estado:</span> {{ user.InformacionConvocatorio.EstadoListadoSENA or user.InformacionConvocatorio.EstadoConvocatoria or '-' }}</p>
+            <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Convocatoria:</span> {{ user.InformacionFormacion.Convocatoria or user.InformacionConvocatorio.Convocatoria or '-' }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Responsable de Pago:</span> {{ user.InformacionConvocatorio.ResponsablePago or user.InformacionConvocatorio.ResponablePago or '-' }}</p>
+            <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Pais:</span> {{ user.PaisResidencia or '-' }}</p>
+            <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Ciudad:</span> {{ user.CiudadResidencia or '-' }}</p>
+            <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Estado Términos:</span> {{ '-' }}</p>
           </div>
         </div>
       </div>
@@ -83,7 +86,7 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
           </svg>
-          Solicitar credenciales
+          Consultar Usuario y Contraseña PRISMA
         </button>
       </div>
     </div>
