@@ -27,9 +27,12 @@ class UsersSearchController:
                 )
             result = self.user_service.search_user(term)
             user = result.get("user", None)
-            if user and isinstance(user, dict) and "Correo" in user:
+            if user and isinstance(user, dict):
                 user = deepcopy(user)
-                user["Correo"] = mask_email(user["Correo"])
+                if "CorreoPersonal" in user:
+                    user["CorreoPersonal"] = mask_email(user["CorreoPersonal"])
+                if "Correo" in user:
+                    user["Correo"] = mask_email(user["Correo"])
             return render_template(
                 "index.html",
                 user=user,

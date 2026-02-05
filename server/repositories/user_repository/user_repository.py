@@ -1,8 +1,12 @@
+import time
 from copy import deepcopy
 
 from config.firebase.config_firebase import db
 from utils.excel_aprendiz.constants import BATCH_SIZE_UPLOAD
 from utils.excel_aprendiz.normalize import normalize_document_key
+from utils.worker.constants import CODE_EXPIRATION_SECONDS
+
+COLLECTION_USER_CODES = "user_codes"
 
 
 class UserRepository:
@@ -53,3 +57,36 @@ class UserRepository:
             return None
 
         return stored_password_hash
+
+    def set_user_code(self, doc_key: str, code: str) -> None:
+        if not doc_key or not code:
+            return
+        payload = {"code": code.strip(), "created_at": int(time.time())}
+        db.child(COLLECTION_USER_CODES).child(doc_key).set(payload)
+
+    def get_user_code(self, doc_key: str) -> str | None:
+        if not doc_key:
+            return None
+        snapshot = db.child(COLLECTION_USER_CODES).child(doc_key).get()
+        if snapshot is None:
+            return None
+        data = snapshot.val() if hasattr(snapshot, "val") else snapshot
+        if not isinstance(data, dict):
+            return None
+
+        created_at = data.get("created_at")
+        if isinstance(created_at, (int, float)):
+            elapsed_seconds = int(time.time()) - int(created_at)
+            if elapsed_seconds > CODE_EXPIRATION_SECONDS:
+                self.delete_user_code(doc_key)
+                return None
+
+        stored = data.get("code")
+        if not isinstance(stored, str):
+            return None
+        return stored.strip()
+
+    def delete_user_code(self, doc_key: str) -> None:
+        if not doc_key:
+            return
+        db.child(COLLECTION_USER_CODES).child(doc_key).remove()

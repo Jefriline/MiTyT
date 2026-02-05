@@ -1,5 +1,6 @@
 from utils.excel_aprendiz.constants import (
     CANONICO_A_INDICES_KEY,
+    CANONICOS_OPCIONALES,
     CANONICOS_REQUERIDOS,
     CAMPOS_OBLIGATORIOS_NORMALIZADOS,
     NORMALIZADO_A_CANONICO,
@@ -45,6 +46,22 @@ def _indices_headers(header_row: tuple) -> dict[str, int] | None:
         idx_elegido = elegido[0]
         indices[CANONICO_A_INDICES_KEY[canonico]] = idx_elegido
 
+    for canonico in CANONICOS_OPCIONALES:
+        candidatos = [
+            (idx, col_norm)
+            for idx, col_norm in columnas
+            if idx not in indices.values() and _columna_coincide_canonico(col_norm, canonico)
+        ]
+        if not candidatos:
+            continue
+        exactos = [
+            c
+            for c in candidatos
+            if c[1] in NORMALIZADO_A_CANONICO and NORMALIZADO_A_CANONICO[c[1]] == canonico
+        ]
+        elegido = exactos[0] if exactos else max(candidatos, key=lambda c: len(c[1]))
+        indices[CANONICO_A_INDICES_KEY[canonico]] = elegido[0]
+
     return indices
 
 
@@ -57,27 +74,48 @@ def _fila_a_aprendiz(row: tuple, indices: dict[str, int]) -> dict | None:
         if not valor(campo):
             return None
 
+    primer_nombre = valor("primernombre")
+    segundo_nombre = valor("segundonombre")
+    primer_apellido = valor("primerapellido")
+    segundo_apellido = valor("segundoapellido")
+    nombre_completo = " ".join(
+        p for p in (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido) if p
+    ).strip() or valor("nrodocumento")
+
     informacion_formacion = {
         "Regional": valor("regional"),
         "CentroFormacion": valor("centroformacion"),
-        "CorreoContacto": valor("correocontacto"),
         "Ficha": valor("ficha"),
         "Programa": valor("programa"),
         "Modalidad": valor("modalidad"),
-        "Avance": valor("avance"),
+        "FechaInicioFicha": valor("fechainicioficha"),
+        "FechaFinFicha": valor("fechafinficha"),
+        "PorcentajeAvanceActual": valor("porcentajeavanceactual"),
+        "CorreoCentroFormacion": valor("correocentroformacion"),
     }
+
     informacion_convocatorio = {
-        "Convocatoria": valor("convocatoria"),
-        "EstadoTerminos": valor("estadoterminos"),
-        "EstadoConvocatoria": valor("estadoconvocatoria"),
-        "ResponablePago": valor("responablepago"),
-        "Observaciones": valor("observaciones"),
+        "EstadoListadoSENA": valor("estadolistadosena"),
+        "ResponsablePago": valor("responsablepago"),
     }
+
     return {
-        "Nombre": valor("nombre"),
+        "Nombre": nombre_completo,
+        "NroDocumento": valor("nrodocumento"),
         "TipoDocumento": valor("tipodocumento"),
-        "Nro-Documento": valor("nrodocumento"),
-        "Correo": valor("correo"),
+        "CorreoPersonal": valor("correopersonal"),
         "InformacionFormacion": informacion_formacion,
         "InformacionConvocatorio": informacion_convocatorio,
+        "UsuarioPrisma": valor("usuarioprisma"),
+        "ContrasenaPRISMA": valor("contrasenaprisma"),
+        "PrimerApellido": primer_apellido,
+        "SegundoApellido": segundo_apellido,
+        "PrimerNombre": primer_nombre,
+        "SegundoNombre": segundo_nombre,
+        "PaisResidencia": valor("paisresidencia"),
+        "DepartamentoResidencia": valor("departamentoresidencia"),
+        "CiudadResidencia": valor("ciudadresidencia"),
+        "EstadoAprendiz": valor("estadoaprendiz"),
+        "AplicoBeneficioPagoAnteriormente": valor("aplicobeneficiopagoanteriormente"),
+        "DatosBeneficioAplicado": valor("datosbeneficioaplicado"),
     }

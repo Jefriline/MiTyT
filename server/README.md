@@ -4,15 +4,22 @@
 
 Definir en un archivo `.env` en la **raíz del proyecto** (carpeta que contiene `server/`):
 
-| Variable      | Descripcion |
+| Variable      | Descripción |
 |---------------|-------------|
 | `PORT`        | Puerto del servidor (ej: `5000`). Si no se define, se usa `5000`. |
 | `SECRET_KEY`  | Clave secreta usada por Flask para firmar la sesión. En producción usar un valor aleatorio largo (ej: `python -c "import secrets; print(secrets.token_hex())"`). |
 | `CORS_ORIGINS` | Origenes permitidos para CORS. Si no se define, se usa `*`. En producción: `https://tu-dominio.com` o varios separados por coma. |
-| `FIREBASE_CONFIG_JSON` | (Opcional) JSON completo de Firebase como texto. Si se define, no se usa el archivo. Útil en Render y entornos sin archivos. |
+| `FIREBASE_CONFIG_JSON` | (Opcional) JSON completo de Firebase como texto. Si se define, no se usa el archivo. |
 | `FIREBASE_CONFIG` | (Opcional) Ruta al archivo JSON de Firebase. Si no se define y tampoco `FIREBASE_CONFIG_JSON`, se usa `config-firebase.json` en la carpeta del script. |
 | `TURNSTILE_SITE_KEY` | Site key del widget Cloudflare Turnstile (formulario de búsqueda). |
 | `TURNSTILE_KEY` | Secret key de Turnstile para validar el token en el servidor (Siteverify). |
+| `EMAIL_SEND` | Cuenta desde la que se envían correos (Gmail API OAuth2). |
+| `CLIENT_ID` | OAuth2 Client ID de Google Cloud (tipo aplicación de escritorio o web). |
+| `SECRET_CLIENT_ID` | OAuth2 Client Secret. |
+| `REFRESH_TOKEN` | Refresh token obtenido con OAuth 2.0 Playground (scope https://mail.google.com). |
+| `REDIS_URL` | URL de Redis para la cola de correos (credenciales) y rate limit. Ej: `redis://localhost:6379`. |
+| `SITE_URL` | (Opcional) URL publica del sitio |
+
 
 **Dónde definir:** `.env` en la raíz del proyecto o en `server/`. Con docker-compose se usa `server/.env` si existe.
 
@@ -61,7 +68,7 @@ Definir `FIREBASE_CONFIG_JSON` con el **contenido completo** del JSON (una sola 
 
 ---
 
-## Ejecucion
+## Ejecución
 
 **Desarrollo (desde la carpeta `server/`):**
 
@@ -76,13 +83,13 @@ python server.py
 waitress-serve --host=0.0.0.0 --port=5000 server:app
 ```
 
-Si se ejecuta desde la raiz del proyecto (carpeta que contiene `server/`), usar en su lugar:
+Si se ejecuta desde la raíz del proyecto (carpeta que contiene `server/`), usar en su lugar:
 
 ```bash
 waitress-serve --host=0.0.0.0 --port=5000 server.server:app
 ```
 
-**Produccion con Gunicorn (Linux/Docker, desde la raiz del proyecto):**
+**Producción con Gunicorn (Linux/Docker, desde la raíz del proyecto):**
 
 ```bash
 gunicorn -w 4 -b 0.0.0.0:5000 "server.server:app"

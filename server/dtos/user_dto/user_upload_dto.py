@@ -1,33 +1,32 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class InformacionFormacionDTO(BaseModel):
-    Regional: str
-    CentroFormacion: str
-    CorreoContacto: str
-    Ficha: str
-    Programa: str
-    Modalidad: str
-    Avance: str
+    Regional: str = ""
+    CentroFormacion: str = ""
+    Ficha: str = ""
+    Programa: str = ""
+    Modalidad: str = ""
+    FechaInicioFicha: str = ""
+    FechaFinFicha: str = ""
+    PorcentajeAvanceActual: str = ""
+    CorreoCentroFormacion: str = ""
 
 
 class InformacionConvocatorioDTO(BaseModel):
-    Convocatoria: str
-    EstadoTerminos: str
-    EstadoConvocatoria: str
-    ResponablePago: str
-    Observaciones: str
+    EstadoListadoSENA: str = ""
+    ResponsablePago: str = ""
 
 
 class AprendizCreateDTO(BaseModel):
-    Nombre: str
-    TipoDocumento: str
-    nro_documento: str = Field(alias="Nro-Documento")
-    Correo: str
+    Nombre: str = ""
+    NroDocumento: str = ""
+    TipoDocumento: str = ""
+    CorreoPersonal: str = ""
     InformacionFormacion: InformacionFormacionDTO
     InformacionConvocatorio: InformacionConvocatorioDTO
 
-    model_config = {"populate_by_name": True, "extra": "forbid"}
+    model_config = {"populate_by_name": True, "extra": "allow"}
 
 
 class UserUploadResponseDTO(BaseModel):

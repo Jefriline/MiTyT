@@ -16,7 +16,7 @@ def _load_config() -> dict:
     path_to_json = path_from_env if path_from_env else DEFAULT_PATH_TO_JSON
     if not os.path.exists(path_to_json):
         raise FileNotFoundError(
-            f"No se encontro el JSON de credenciales. "
+            f"No se encontró el JSON de credenciales. "
             f"Define FIREBASE_CONFIG_JSON (JSON completo) o FIREBASE_CONFIG (ruta al archivo), "
             f"o coloca config-firebase.json en: {DEFAULT_PATH_TO_JSON}"
         )
@@ -34,9 +34,9 @@ def initialize_firebase():
     try:
         print("Conectando a Firebase...")
         database.child("usuarios").get()
-        print("Conexion exitosa")
+        print("Conexión exitosa")
     except Exception as error:
-        print(f"Error de conexion: {error}")
+        print(f"Error de conexión: {error}")
     return database
 
 

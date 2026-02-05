@@ -1,13 +1,14 @@
 import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from flask import Flask, render_template
 from flask_cors import CORS
-from dotenv import load_dotenv
 
 from routes.user_routes.user_routes import users_bp
 from routes.help_routes.help_routes import help_bp
-
-
-load_dotenv()
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 

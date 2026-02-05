@@ -22,7 +22,7 @@ def parse_excel_to_aprendices(
     sheet = workbook.active
     if not sheet:
         workbook.close()
-        return [], ["El archivo no tiene hojas o esta vacio"], []
+        return [], ["El archivo no tiene hojas o está vacío"], []
 
     rows_iter = sheet.iter_rows(min_row=1, values_only=True)
     header_row = next(rows_iter, None)
@@ -40,31 +40,31 @@ def parse_excel_to_aprendices(
             continue
         if len(rows_deduped) >= MAX_FILAS_EXCEL:
             errors.append(
-                f"Limite maximo de {MAX_FILAS_EXCEL} registros por archivo. "
-                f"Se procesaron solo las primeras {MAX_FILAS_EXCEL} filas validas. "
-                f"Divida el Excel en archivos mas pequeños."
+                f"Límite máximo de {MAX_FILAS_EXCEL} registros por archivo. "
+                f"Se procesaron solo las primeras {MAX_FILAS_EXCEL} filas válidas. "
+                f"Divida el Excel en archivos más pequeños."
             )
             break
 
         aprendiz = _fila_a_aprendiz(row, indices)
         if aprendiz is None:
             errors.append(
-                f"Fila {row_index}: faltan Nro-Documento, Correo, Ficha o EstadoConvocatoria"
+                f"Fila {row_index}: faltan Nro. Documento, Correo personal, Ficha o Estado Listado SENA"
             )
             continue
 
-        raw_doc = aprendiz.get("Nro-Documento", "")
+        raw_doc = aprendiz.get("NroDocumento", "")
         doc_key = normalize_document_key(raw_doc)
         if doc_key is None:
             errors.append(
-                f"Fila {row_index}: Nro-Documento invalido o contiene caracteres prohibidos (. $ # [ ] /)"
+                f"Fila {row_index}: Nro. Documento inválido o contiene caracteres prohibidos (. $ # [ ] /)"
             )
             continue
 
         if doc_key in seen_docs:
             prev_row = seen_docs[doc_key]
             warnings.append(
-                f"Documento {doc_key} duplicado (filas {prev_row} y {row_index}). Se usa la ultima."
+                f"Documento {doc_key} duplicado (filas {prev_row} y {row_index}). Se usa la última."
             )
         seen_docs[doc_key] = row_index
 
