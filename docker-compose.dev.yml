@@ -3,7 +3,7 @@ services:
     build:
       context: ./server
       dockerfile: dockerfile.dev
-    container_name: flask_dev
+    container_name: server
     ports:
       - "5000:5000"
     volumes:
@@ -19,7 +19,7 @@ services:
     build:
       context: ./client
       dockerfile: dockerfile.dev
-    container_name: tailwind_watcher
+    container_name: ClientFrontend
     volumes:
       - ./client:/Client   
     networks:

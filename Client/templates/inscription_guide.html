@@ -1,67 +1,106 @@
 {% extends "layout.html" %}
 
-{& block title %}Ayuda - Guía de Inscripción a las pruebas Saber TyT{% endblock %}
+{% block title %}Ayuda - Guía de Inscripción a las pruebas Saber TyT {% endblock %}
 
-{% block content %
-<div class="">
-    <div class="text-center mt-4 mb-12 px-4">
-        <h1 class="text-5xl font-bold text-gray-900 mb-4">
-            Guía de <span class="text-[#39A900]">Inscripción</span> a las pruebas Saber TyT
-        </h1>
-        <p class="text-xl text-gray-600 max-w-2xl">
-           Sigue estos pasos detallados para completar tu inscripción en las pruebas Saber TyT de manera exitosa.
-        </p>
-    </div>
-    <div class="w-full max-w-5xl px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        
-        <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#39A900] hover:shadow-xl transition-shadow duration-300">
-            <h2 class="font-black text-gray-800 uppercase tracking-wider text-xl mb-2">
-                Paso 1: <span class="text-[#39A900]">Activación de las credenciales de acceso</span>
-            </h2>
-            <p class="text-gray-600">
-                Para activar la cuenta de Icfes, debemos tener las credenciales que nos brinda el icfes
-                por medio de un correo electrónico, normalmente el correo se llama noresponderprisma@icfes ..., en el se encuentra la 
-                información necesaria para activar la cuenta, como el usuario y la contraseña temporal. 
-            </p>
-            <p c lass="text-gray-600 mt-4">
-                Una vez tengamos las credenciales, debemos ingresar a la página oficial del icfes 
-                <a href="https://prisma.icfes.gov.co/" target="_blank" class="text-[#39A900] font-bold hover:underline">https://prisma.icfes.gov.co/</a>, 
-                y en la sección de inicio de sesión, ingresamos el usuario y la contraseña temporal que nos brindaron.
-            </p>
+{% block content %}
+<div class="flex flex-col h-screen max-w-md mx-auto bg-white shadow-2xl overflow-hidden border-x border-gray-100">
+    
+    <div class="p-6 border-b bg-gray-50 flex items-center justify-between">
+        <div>
+            <h2 class="text-sm font-black uppercase text-[#39A900] tracking-widest">Paso <span id="current-index">1</span> de 24</h2>
+            <h3 id="step-title" class="text-xl font-bold text-gray-800">Cargando...</h3>
         </div>
-
-        <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#39A900] hover:shadow-xl transition-shadow duration-300">
-            <h2 class="font-black text-gray-800 uppercase tracking-wider text-xl mb-2">
-                Paso 2: <span class="text-[#39A900]">Actualización de datos personales</span>
-            </h2>
-            <p class="text-gray-600">
-                Después de iniciar sesión por primera vez, el sistema nos pedirá actualizar la contraseña 
-                temporal por una nueva contraseña segura. Además, es importante revisar la información personal,
-                esta misma información es la que se utilizará para la inscripción a las pruebas Saber TyT, 
-                por lo que debemos asegurarnos de que todos los datos estén correctos.
-            </p>
-            <img src="{{ url_for('static', filename='images/guide_update_password.png') }}" alt="Actualización de contraseña" class="w-full h-auto mt-4 rounded-lg shadow-md" />
-            <p class="text-gray-600 mt-4">
-                Una vez actualizadamos la contraseña y verifiquemos los datos personales, podemos proceder a hacer la inscripción a las pruebas Saber TyT.
-            </p>
+        <div class="relative flex items-center justify-center">
+            <svg class="w-14 h-14 transform -rotate-90">
+                <circle cx="28" cy="28" r="24" stroke="#e5e7eb" stroke-width="4" fill="transparent" />
+                <circle id="circle-progress" cx="28" cy="28" r="24" stroke="#39A900" stroke-width="4" 
+                        fill="transparent" stroke-dasharray="150" stroke-dashoffset="150" 
+                        class="transition-all duration-500 ease-in-out" />
+            </svg>
+            <span id="percent-text" class="absolute text-[10px] font-bold">0%</span>
         </div>
-        <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#39A900] hover:shadow-xl transition-shadow duration-300 md:col-span-2">
-                <h2 class="font-black text-gray-800 uppercase tracking-wider text-xl mb-2">
-                    Paso 3: <span class="text-[#39A900]">Inscripción a las pruebas Saber TyT</span>
-                </h2>
-                <p class="text-gray-600 mt-4">
-                    Para inscribirse a las pruebas Saber TyT, debemos acceder al sistema de inscripción del Icfes. 
-                    En la sección de "Inscripción a pruebas Saber TyT", seleccionamos la prueba que deseamos inscribirnos. 
-                    Luego, Llenamos todos los formularios con los campos requeridos, como datos personales, información académica y selección de sede.
-                </p>
-                <p class="text-gray-600 mt-4">
-                    Después de completar los formularios, revisamos le damos a "Continuar" para proceder al pago de la inscripción o la descarga del recibo de pago,    
-                    según las indicaciones del Icfes y condición del aprendiz.
-                </p>
-        </div>
-            
     </div>
 
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+        <div class="rounded-2xl overflow-hidden shadow-inner bg-gray-100 border border-gray-200">
+            <img id="step-image" src="" alt="Paso actual" class="w-full h-auto min-h-[200px] object-contain">
+        </div>
+        <p id="step-desc" class="text-gray-600 leading-relaxed text-lg">
+            </p>
+    </div>
+
+    <div class="p-6 bg-white border-t flex gap-4">
+        <button onclick="prevStep()" id="btn-prev" class="flex-1 py-4 px-6 rounded-xl font-bold text-gray-400 bg-gray-100 transition-all">
+            Anterior
+        </button>
+        <button onclick="nextStep()" id="btn-next" class="flex-[2] py-4 px-6 rounded-xl font-bold text-white bg-[#39A900] shadow-lg shadow-[#39A900]/30 active:scale-95 transition-all">
+            Siguiente
+        </button>
+    </div>
 </div>
+<script>
 
-{% endblock %}}
+    document.addEventListener('DOMContentLoaded', () => {
+    let currentIndex = 0;
+    const totalPasos = PASOS_GUIA.length;
+
+    //Construcción de las imagenes paso a paso
+    const elTitulo = document.getElementById('step-title');
+    const elDesc = document.getElementById('step-desc');
+    const elImg = document.getElementById('step-image');
+    const elCurrentStep = document.getElementById('current-index');
+    const elCircle = document.getElementById('circle-progress');
+    const elPercent = document.getElementById('percent-text');
+    
+    const btnNext = document.getElementById('btn-next');
+    const btnPrev = document.getElementById('btn-prev');
+    
+    // Creación de lógicap para cargar las imagenes
+    function updateUI() {
+        const paso = PASOS_GUIA[currentIndex];
+        elTitulo.textContent = paso.titulo;
+        elDesc.textContent = paso.desc;
+        elCurrentStep.textContent = currentIndex + 1;
+
+        // 2. Actualización de Imagen con Lazy
+        elImg.src = `/static/images/guia/${paso.imagen}`;
+        elImg.alt = `Instrucción para el paso ${currentIndex + 1}`;
+        elImg.loading = "lazy";
+
+        // 3. Lógica del Círculo
+        const porcentaje = ((currentIndex + 1) / totalPasos) * 100;
+        const offset = 150 - (porcentaje / 100) * 150;
+        elCircle.style.strokeDashoffset = offset;
+        elPercent.textContent = `${Math.round(porcentaje)}%`;
+
+        btnPrev.style.visibility = (currentIndex === 0) ? 'hidden' : 'visible';
+        btnNext.textContent = (currentIndex === totalPasos - 1) ? 'Finalizar' : 'Siguiente';
+        
+        // Efecto visual simple al cambiar (Opcional)
+        const container = elImg.parentElement;
+        container.classList.add('opacity-50');
+        setTimeout(() => container.classList.remove('opacity-50'), 200);
+    }
+
+    btnNext.addEventListener('click', () => {
+        if (currentIndex < totalPasos - 1) {
+            currentIndex++;
+            updateUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            alert("¡Has completado la guía con éxito!");
+        }
+    });
+
+    btnPrev.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+
+    updateUI();
+});
+</script>
+{% endblock %}
