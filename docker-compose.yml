@@ -1,10 +1,14 @@
 services:
+  # Los estaticos se generan en la imagen en /app/static; si montamos el volumen
+  # en /app/static, se oculta ese contenido y el volumen queda vacio. Por eso
+  # montamos en /output y al arrancar copiamos /app/static al volumen.
   client_builder:
     build:
       context: ./Client
       dockerfile: dockerfile
     volumes:
-      - client_assets:/app/static
+      - client_assets:/output
+    command: ["sh", "-c", "cp -r /app/static/. /output/. && echo Assets built successfully"]
   server:
     image: mityt-server
     build:
