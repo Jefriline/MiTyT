@@ -10,9 +10,8 @@ RUN npm install
 # Copiamos el resto de archivos del cliente (templates, static)
 COPY . .
 
-# Ejecutamos el build de tailwind
-# Esto generará el archivo en static/css/output.css
-RUN npm run build
+# Build de Tailwind (sin --watch para que termine)
+RUN npx tailwindcss -i ./static/css/styles.css -o ./static/css/dist.css
 
 # En producción, este contenedor puede quedarse "dormido" 
 # o servir de base para que el servidor lea los archivos.
