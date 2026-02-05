@@ -96,3 +96,20 @@ gunicorn -w 4 -b 0.0.0.0:5000 "server.server:app"
 ```
 
 Gunicorn no soporta Windows; en Windows usar Waitress o `python server.py`.
+
+---
+
+## Worker de cola de correos
+
+La app encola el envío de correos (credenciales) en Redis. Para que se envíen, **debe estar corriendo el worker** que procesa esa cola.
+
+**Con Docker (docker-compose):** el worker se levanta solo como servicio `email_worker`; no hace falta hacer nada más.
+
+**En desarrollo local:** ejecutar en **otra terminal** (desde la carpeta `server/`):
+
+```bash
+python scripts/run_email_worker.py
+```
+
+Si no se ejecuta el worker, los correos quedarán en cola y no se enviarán hasta que el worker esté activo. Requiere las mismas variables de entorno que el servidor (sobre todo `REDIS_URL`, `EMAIL_SEND`, `CLIENT_ID`, `SECRET_CLIENT_ID`, `REFRESH_TOKEN`).
+

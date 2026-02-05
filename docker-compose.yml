@@ -4,8 +4,9 @@ services:
       context: ./Client
       dockerfile: dockerfile
     volumes:
-      - client_assets:/app/static 
+      - client_assets:/app/static
   server:
+    image: mityt-server
     build:
       context: ./server
       dockerfile: dockerfile
@@ -23,6 +24,18 @@ services:
       - ./server:/app
       - ./Client/templates:/Client/templates
       - client_assets:/Client/static
+    restart: always
+
+  email_worker:
+    image: mityt-server
+    command: ["python", "scripts/run_email_worker.py"]
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server:/app
+    depends_on:
+      server:
+        condition: service_started
     restart: always
 
 volumes:
