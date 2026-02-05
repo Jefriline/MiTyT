@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+/* Incluir templates para que las clases usadas en HTML (login, layout, etc.) se generen en dist.css.
+   Sin esto, en algunos entornos (p. ej. build Docker) las plantillas no se escanean y el SVG/iconos
+   pierden w-5, h-5, flex-shrink-0, text-red-700, etc. */
+@source "../../templates";
