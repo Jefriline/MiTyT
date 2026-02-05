@@ -1,6 +1,5 @@
-@import "tailwindcss";
+/* Base de escaneo: raiz del cliente (donde estan templates/). En Docker CWD es /app, asi se escanea todo. */
+@import "tailwindcss" source("../../");
 
-/* Incluir templates para que las clases usadas en HTML (login, layout, etc.) se generen en dist.css.
-   Sin esto, en algunos entornos (p. ej. build Docker) las plantillas no se escanean y el SVG/iconos
-   pierden w-5, h-5, flex-shrink-0, text-red-700, etc. */
-@source "../../templates";
+/* Safelist: iconos SVG y panel de error. Garantiza que esten en dist.css aunque el escaneo falle en VPS. */
+@source inline("w-5 h-5 w-4 h-4 flex-shrink-0 text-red-600 text-red-700 bg-red-50 border-red-200 rounded-lg flex items-center gap-2");
