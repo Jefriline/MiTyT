@@ -85,6 +85,7 @@ def _fila_a_aprendiz(row: tuple, indices: dict[str, int]) -> dict | None:
     informacion_formacion = {
         "Regional": valor("regional"),
         "CentroFormacion": valor("centroformacion"),
+        "Convocatoria": valor("convocatoria"),
         "Ficha": valor("ficha"),
         "Programa": valor("programa"),
         "Modalidad": valor("modalidad"),

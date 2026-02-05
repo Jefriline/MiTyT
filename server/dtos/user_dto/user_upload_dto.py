@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class InformacionFormacionDTO(BaseModel):
     Regional: str = ""
     CentroFormacion: str = ""
+    Convocatoria: str = ""
     Ficha: str = ""
     Programa: str = ""
     Modalidad: str = ""

@@ -3,6 +3,7 @@ NORMALIZADO_A_CANONICO: dict[str, str] = {
     "regional": "Regional",
     "centrodeformación": "CentroFormacion",
     "centroformacion": "CentroFormacion",
+    "convocatoria": "Convocatoria",
     "primerapellido": "PrimerApellido",
     "segundoapellido": "SegundoApellido",
     "primernombre": "PrimerNombre",
@@ -48,6 +49,7 @@ PRIMARY_NORM_POR_CANONICO = _primary_norm_por_canonico()
 CANONICO_A_INDICES_KEY: dict[str, str] = {
     "Regional": "regional",
     "CentroFormacion": "centroformacion",
+    "Convocatoria": "convocatoria",
     "PrimerApellido": "primerapellido",
     "SegundoApellido": "segundoapellido",
     "PrimerNombre": "primernombre",
@@ -76,7 +78,7 @@ CANONICO_A_INDICES_KEY: dict[str, str] = {
 
 CANONICOS_OPCIONALES = frozenset(
     {
-        "Regional", "CentroFormacion", "PrimerApellido", "SegundoApellido",
+        "Regional", "CentroFormacion", "Convocatoria", "PrimerApellido", "SegundoApellido",
         "PrimerNombre", "SegundoNombre", "TipoDocumento", "PaisResidencia",
         "DepartamentoResidencia", "CiudadResidencia", "FechaInicioFicha", "FechaFinFicha",
         "Modalidad", "EstadoAprendiz", "PorcentajeAvanceActual",
@@ -90,7 +92,7 @@ CAMPOS_OBLIGATORIOS_NORMALIZADOS = ("nrodocumento", "correopersonal", "ficha", "
 MENSAJE_HEADERS_FALTANTES = (
     "La primera fila debe tener columnas que correspondan (ignorando mayúsculas y espacios) a: "
     "Nro. Documento, Correo personal, Ficha, Estado Listado SENA. "
-    "Opcionales: Regional, Centro de formación, Primer/Segundo Apellido/Nombre, Tipo Documento, "
+    "Opcionales: Regional, Centro de formación, Convocatoria, Primer/Segundo Apellido/Nombre, Tipo Documento, "
     "País/Departamento/Ciudad Residencia, Programa, Fechas Ficha, Modalidad, Estado del Aprendiz, "
     "Porcentaje Avance, Beneficio Pago, Responsable de Pago, Usuario Prisma, Contraseña PRISMA, "
     "Correo del centro formación."
