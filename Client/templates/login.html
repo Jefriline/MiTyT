@@ -9,11 +9,29 @@
     </div>
 
     <div class="w-full max-w-md">
-      <form id="loginForm" action="/users/login" method="post" class="bg-white shadow-lg rounded-lg px-7 pt-6 pb-8 mb-4 py-12">
+      <form id="loginForm" action="/users/login" method="post" class="bg-white shadow-lg rounded-lg px-7 pt-6 pb-8 mb-4 py-12"
+        {% if blocked %}data-blocked="true" data-seconds="{{ seconds_remaining }}"{% endif %}
+      >
         {% if error %}
-        <div class="mb-4 p-3 rounded-lg bg-red-100 text-red-800 border border-red-300 text-sm">{{ error }}</div>
+        <div id="loginErrorPanel" class="mb-4 p-4 rounded-lg bg-red-50 border border-red-200">
+          <div class="flex items-center gap-2 text-red-700">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <span id="loginErrorText">{{ error }}</span>
+          </div>
+          {% if blocked %}
+          <p class="mt-2 text-sm text-red-600">Puedes intentar con otra cuenta o esperar el tiempo indicado.</p>
+          <div id="loginCountdownContainer" class="mt-3 flex items-center justify-center gap-2 text-sm text-red-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Disponible en: <strong id="loginCountdown">--:--</strong></span>
+          </div>
+          {% endif %}
+        </div>
         {% endif %}
-        <div class="mb-4 space-y-8">
+        <div id="loginFieldsContainer" class="mb-4 space-y-8">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="username" type="text">
             Usuario
           </label>
@@ -35,14 +53,166 @@
                 class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#39A900] shadow-lg transition"
                 />
         </div>
+        {% if turnstile_site_key %}
+        <div id="loginTurnstileContainer" class="flex justify-center mb-4 hidden" data-site-key="{{ turnstile_site_key|e }}"></div>
+        {% endif %}
         <button
           id="loginButton"
           type="submit"
-          class="bg-[#39A900] text-white px-6 py-3 rounded-lg hover:bg-[#2d8500] transition font-semibold text-lg shadow-lg w-full"
-        >Iniciar Sesión
+          class="bg-[#39A900] text-white px-6 py-3 rounded-lg hover:bg-[#2d8500] hover:shadow-lg active:scale-95 transition-all duration-200 font-semibold text-lg shadow-lg w-full flex items-center justify-center gap-2"
+        >
+          <span id="loginSpinner" class="hidden">
+            <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </span>
+          <span id="loginButtonText">Iniciar Sesión</span>
         </button>
         </form>
     </div>
 </div>
 
+<script>
+(function() {
+  var form = document.getElementById("loginForm");
+  var fieldsContainer = document.getElementById("loginFieldsContainer");
+  var submitButton = document.getElementById("loginButton");
+  var spinner = document.getElementById("loginSpinner");
+  var buttonText = document.getElementById("loginButtonText");
+  var usernameInput = document.getElementById("username");
+  var passwordInput = document.getElementById("password");
+  var countdownDisplay = document.getElementById("loginCountdown");
+  var errorPanel = document.getElementById("loginErrorPanel");
+  var errorText = document.getElementById("loginErrorText");
+  var countdownContainer = document.getElementById("loginCountdownContainer");
+
+  if (!form) return;
+
+  var isBlocked = form.getAttribute("data-blocked") === "true";
+  var secondsRemaining = parseInt(form.getAttribute("data-seconds") || "0", 10);
+  var countdownInterval = null;
+
+  function formatTime(totalSeconds) {
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = totalSeconds % 60;
+    return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+  }
+
+  function hideBlockMessage() {
+    isBlocked = false;
+    if (errorPanel) errorPanel.classList.add("hidden");
+  }
+
+  function startCountdown() {
+    if (!countdownDisplay || secondsRemaining <= 0) return;
+    countdownDisplay.textContent = formatTime(secondsRemaining);
+    countdownInterval = setInterval(function() {
+      secondsRemaining--;
+      if (secondsRemaining <= 0) {
+        clearInterval(countdownInterval);
+        hideBlockMessage();
+      } else {
+        countdownDisplay.textContent = formatTime(secondsRemaining);
+      }
+    }, 1000);
+  }
+
+  if (isBlocked && secondsRemaining > 0) {
+    startCountdown();
+  }
+
+  var container = document.getElementById("loginTurnstileContainer");
+  var siteKey = container ? (container.getAttribute("data-site-key") || "") : "";
+  var turnstileWidgetId = null;
+  var turnstileToken = null;
+  var isSubmitting = false;
+
+  function showSpinner() {
+    if (spinner) spinner.classList.remove("hidden");
+    if (buttonText) buttonText.textContent = "Verificando...";
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.classList.add("opacity-70");
+    }
+  }
+
+  function hideSpinner() {
+    if (spinner) spinner.classList.add("hidden");
+    if (buttonText) buttonText.textContent = "Iniciar Sesión";
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.classList.remove("opacity-70");
+    }
+  }
+
+  function loadTurnstileScript(callback) {
+    if (window.turnstile) {
+      callback();
+      return;
+    }
+    var script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.async = true;
+    script.onload = callback;
+    document.body.appendChild(script);
+  }
+
+  function destroyWidget() {
+    if (window.turnstile && turnstileWidgetId !== null) {
+      try { turnstile.remove(turnstileWidgetId); } catch(e) {}
+    }
+    turnstileWidgetId = null;
+    turnstileToken = null;
+    if (container) {
+      container.innerHTML = "";
+      container.classList.add("hidden");
+    }
+  }
+
+  function submitForm() {
+    var existing = form.querySelector('input[name="cf-turnstile-response"]');
+    if (existing) existing.remove();
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "cf-turnstile-response";
+    input.value = turnstileToken;
+    form.appendChild(input);
+    isSubmitting = true;
+    HTMLFormElement.prototype.submit.call(form);
+  }
+
+  function renderWidget() {
+    if (!container || !window.turnstile) return;
+    destroyWidget();
+    container.classList.remove("hidden");
+    turnstileWidgetId = turnstile.render(container, {
+      sitekey: siteKey,
+      theme: "light",
+      callback: function(token) {
+        turnstileToken = token;
+        submitForm();
+      },
+      "error-callback": function() {
+        destroyWidget();
+        hideSpinner();
+      },
+      "expired-callback": function() {
+        turnstileToken = null;
+      }
+    });
+  }
+
+  form.addEventListener("submit", function(event) {
+    if (isSubmitting) return event.preventDefault();
+    if (siteKey) {
+      event.preventDefault();
+      showSpinner();
+      loadTurnstileScript(function() {
+        renderWidget();
+      });
+    }
+  });
+})();
+</script>
 {% endblock %}
