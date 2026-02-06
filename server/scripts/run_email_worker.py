@@ -13,3 +13,4 @@ from utils.worker.email_worker import run_email_worker
 
 if __name__ == "__main__":
     run_email_worker(poll_timeout_seconds=5)
+    

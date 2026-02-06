@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block title %}Ayuda - Guía de Inscripción a las pruebas Saber TyT {% endblock %}
+
+{% block content %}
+<div class="flex flex-col h-screen max-w-md mx-auto bg-white shadow-2xl overflow-hidden border-x border-gray-100">
+    
+    <div class="p-6 border-b bg-gray-50 flex items-center justify-between">
+        <div>
+            <h2 class="text-sm font-black uppercase text-[#39A900] tracking-widest">Paso <span id="current-index">1</span> de 24</h2>
+            <h3 id="step-title" class="text-xl font-bold text-gray-800">Cargando...</h3>
+        </div>
+        <div class="relative flex items-center justify-center">
+            <svg class="w-14 h-14 transform -rotate-90">
+                <circle cx="28" cy="28" r="24" stroke="#e5e7eb" stroke-width="4" fill="transparent" />
+                <circle id="circle-progress" cx="28" cy="28" r="24" stroke="#39A900" stroke-width="4" 
+                        fill="transparent" stroke-dasharray="150" stroke-dashoffset="150" 
+                        class="transition-all duration-500 ease-in-out" />
+            </svg>
+            <span id="percent-text" class="absolute text-[10px] font-bold">0%</span>
+        </div>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+        <div class="rounded-2xl overflow-hidden shadow-inner bg-gray-100 border border-gray-200">
+            <img id="step-image" src="" alt="Paso actual" class="w-full h-auto min-h-[200px] object-contain">
+        </div>
+        <p id="step-desc" class="text-gray-600 leading-relaxed text-lg">
+            </p>
+    </div>
+
+    <div class="p-6 bg-white border-t flex gap-4">
+        <button onclick="prevStep()" id="btn-prev" class="flex-1 py-4 px-6 rounded-xl font-bold text-gray-400 bg-gray-100 transition-all">
+            Anterior
+        </button>
+        <button onclick="nextStep()" id="btn-next" class="flex-[2] py-4 px-6 rounded-xl font-bold text-white bg-[#39A900] shadow-lg shadow-[#39A900]/30 active:scale-95 transition-all">
+            Siguiente
+        </button>
+    </div>
+</div>
+<script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+    let currentIndex = 0;
+    const totalPasos = PASOS_GUIA.length;
+
+    //Construcción de las imagenes paso a paso
+    const elTitulo = document.getElementById('step-title');
+    const elDesc = document.getElementById('step-desc');
+    const elImg = document.getElementById('step-image');
+    const elCurrentStep = document.getElementById('current-index');
+    const elCircle = document.getElementById('circle-progress');
+    const elPercent = document.getElementById('percent-text');
+    
+    const btnNext = document.getElementById('btn-next');
+    const btnPrev = document.getElementById('btn-prev');
+    
+    // Creación de lógicap para cargar las imagenes
+    function updateUI() {
+        const paso = PASOS_GUIA[currentIndex];
+        elTitulo.textContent = paso.titulo;
+        elDesc.textContent = paso.desc;
+        elCurrentStep.textContent = currentIndex + 1;
+
+        // 2. Actualización de Imagen con Lazy
+        elImg.src = `/static/images/guia/${paso.imagen}`;
+        elImg.alt = `Instrucción para el paso ${currentIndex + 1}`;
+        elImg.loading = "lazy";
+
+        // 3. Lógica del Círculo
+        const porcentaje = ((currentIndex + 1) / totalPasos) * 100;
+        const offset = 150 - (porcentaje / 100) * 150;
+        elCircle.style.strokeDashoffset = offset;
+        elPercent.textContent = `${Math.round(porcentaje)}%`;
+
+        btnPrev.style.visibility = (currentIndex === 0) ? 'hidden' : 'visible';
+        btnNext.textContent = (currentIndex === totalPasos - 1) ? 'Finalizar' : 'Siguiente';
+        
+        // Efecto visual simple al cambiar (Opcional)
+        const container = elImg.parentElement;
+        container.classList.add('opacity-50');
+        setTimeout(() => container.classList.remove('opacity-50'), 200);
+    }
+
+    btnNext.addEventListener('click', () => {
+        if (currentIndex < totalPasos - 1) {
+            currentIndex++;
+            updateUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            alert("¡Has completado la guía con éxito!");
+        }
+    });
+
+    btnPrev.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+
+    updateUI();
+});
+</script>
+{% endblock %}

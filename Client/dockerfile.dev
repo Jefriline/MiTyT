@@ -1,0 +1,12 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Instalamos Tailwind CLI
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+# Comando para observar cambios en el CSS y compilarlos
+CMD ["npx", "tailwindcss", "-i", "./static/css/styles.css", "-o", "./static/css/dist.css", "--watch"]

@@ -1,0 +1,45 @@
+services:
+  email_worker:
+    image: redis:alpine
+    container_name: redis_dev  
+    ports:
+      - "6379:6379"
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server:/app
+    restart: always
+    networks:
+      - dev-network
+  backend:
+    build:
+      context: ./server
+      dockerfile: dockerfile.dev
+    depends_on:
+      - email_worker
+    container_name: server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app            
+      - ./client/templates:/Client/templates 
+      - ./client/static:/Client/static        
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - dev-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: dockerfile.dev
+    container_name: ClientFrontend
+    volumes:
+      - ./client:/Client   
+    networks:
+      - dev-network
+  
+
+networks:
+  dev-network:
+    driver: bridge
