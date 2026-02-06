@@ -303,7 +303,17 @@
     });
   }
 
+  var noHabilitadoMessage = document.getElementById("noHabilitadoMessage");
+
   btnRequest.addEventListener("click", function () {
+    var estadoConvocatoria = (section.getAttribute("data-estado-convocatoria") || "").toUpperCase().trim();
+    if (estadoConvocatoria === "NO HABILITADO") {
+      if (noHabilitadoMessage) {
+        noHabilitadoMessage.classList.remove("hidden");
+        noHabilitadoMessage.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+      return;
+    }
     destroyConfirmTurnstile();
     isConfirmBlocked = false;
     if (confirmCountdownInterval) {

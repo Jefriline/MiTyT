@@ -77,17 +77,21 @@
         </div>
       </div>
 
-      <div class="mt-8 flex justify-center" id="credentialsSection" data-document="{{ (user.NroDocumento or user['Nro-Documento'])|e }}" data-turnstile-key="{{ turnstile_site_key|e }}">
+      {% set estado_convocatoria = (user.InformacionConvocatorio.EstadoListadoSENA or user.InformacionConvocatorio.EstadoConvocatoria or '')|string|trim %}
+      {% set no_habilitado = ((estado_convocatoria|upper) == 'NO HABILITADO') %}
+      <div class="mt-8 flex flex-col items-center gap-4" id="credentialsSection" data-document="{{ (user.NroDocumento or user['Nro-Documento'])|e }}" data-turnstile-key="{{ turnstile_site_key|e }}" data-estado-convocatoria="{{ estado_convocatoria|e }}">
         <button
           type="button"
           id="btnRequestCredentials"
-          class="bg-[#39A900] text-white px-6 py-3 rounded-lg hover:bg-[#2d8500] hover:shadow-lg active:scale-95 transition-all duration-200 font-semibold shadow-md flex items-center gap-2"
+          class="bg-[#39A900] text-white px-6 py-3 rounded-lg hover:bg-[#2d8500] hover:shadow-lg active:scale-95 transition-all duration-200 font-semibold shadow-md flex items-center gap-2 {{ 'opacity-60 cursor-not-allowed' if no_habilitado else '' }}"
+          {{ 'disabled' if no_habilitado else '' }}
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
           </svg>
           Consultar Usuario y Contraseña PRISMA
         </button>
+        <p id="noHabilitadoMessage" class="w-full max-w-md rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-gray-700 {{ '' if no_habilitado else 'hidden' }}">No puede consultar usuario y contraseña porque su estado en la convocatoria es No habilitado.</p>
       </div>
     </div>
 

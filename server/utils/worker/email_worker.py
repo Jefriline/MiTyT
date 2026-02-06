@@ -2,9 +2,20 @@ import json
 import os
 import time
 
+import redis
+
 from config.redis.config_redis import get_redis_client
 from utils.gmail_send import send_email
 from utils.worker.constants import QUEUE_EMAIL_CREDENTIALS
+
+_RECONNECT_DELAY_SECONDS = 2
+_CONNECTION_ERRORS = (
+    redis.ConnectionError,
+    redis.TimeoutError,
+    OSError,
+    BrokenPipeError,
+    ConnectionResetError,
+)
 
 _EMAIL_TEMPLATE_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "credentials_email.html"
@@ -50,12 +61,16 @@ def _process_one_message(payload_str: str) -> None:
 
 
 def run_email_worker(poll_timeout_seconds: int = 5) -> None:
-    print("[Worker] Conectando a Redis...")
-    client = get_redis_client()
-    print(f"[Worker] Conectado. Escuchando cola '{QUEUE_EMAIL_CREDENTIALS}'...")
     messages_processed = 0
+    client = None
+
     while True:
         try:
+            if client is None:
+                print("[Worker] Conectando a Redis...")
+                client = get_redis_client()
+                print(f"[Worker] Conectado. Escuchando cola '{QUEUE_EMAIL_CREDENTIALS}'...")
+
             result = client.brpop(QUEUE_EMAIL_CREDENTIALS, timeout=poll_timeout_seconds)
             if result is None:
                 continue
@@ -63,6 +78,17 @@ def run_email_worker(poll_timeout_seconds: int = 5) -> None:
             messages_processed += 1
             print(f"[Worker] Mensaje #{messages_processed} recibido, procesando...")
             _process_one_message(payload_str)
+
+        except _CONNECTION_ERRORS as connection_error:
+            print(f"[Worker] Conexión perdida con Redis ({type(connection_error).__name__}), reconectando en {_RECONNECT_DELAY_SECONDS}s...")
+            try:
+                if client is not None:
+                    client.close()
+            except Exception:
+                pass
+            client = None
+            time.sleep(_RECONNECT_DELAY_SECONDS)
+
         except json.JSONDecodeError as decode_error:
             print(f"[Worker] ERROR: Mensaje inválido en cola: {decode_error}")
         except Exception as error:
