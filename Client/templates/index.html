@@ -61,9 +61,7 @@
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Centro:</span> {{ user.InformacionFormacion.CentroFormacion }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Ficha:</span> {{ user.InformacionFormacion.Ficha }}</p>
             <p class="mt-2 text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Programa:</span> {{ user.InformacionFormacion.Programa }}</p>
-            <p class="mt-2 text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Correo de contacto:</span> {{ user.InformacionFormacion.CorreoCentroFormacion }}</p>
             <p class="mt-2 text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Modalidad:</span> {{ user.InformacionFormacion.Modalidad }}</p>
-            <p class="mt-2 text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Avance:</span> {{ user.InformacionFormacion.PorcentajeAvanceActual }}</p>
           </div>
         </div>
 
@@ -76,6 +74,7 @@
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Pais:</span> {{ user.PaisResidencia or '-' }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Ciudad:</span> {{ user.CiudadResidencia or '-' }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Estado Términos:</span> {{ '-' }}</p>
+            <p class="mt-3 text-[18px] text-gray-700">Para más información consulte al correo de su centro de formación: <span class="font-semibold text-gray-900">{{ user.InformacionFormacion.CorreoCentroFormacion or '-' }}</span></p>
           </div>
         </div>
       </div>
