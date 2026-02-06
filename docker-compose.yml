@@ -20,7 +20,8 @@ services:
       dockerfile: dockerfile
     image: mityt-client:latest
     volumes:
-      - client_assets:/app/static
+      - client_assets:/output
+    command: ["sh", "-c", "cp -r /app/static/. /output/. && echo Assets built successfully"]
   server:
     build:
       context: ./server
@@ -40,7 +41,7 @@ services:
       - PORT=5000
     volumes:
       - ./Client/templates:/Client/templates:ro
-      - client_assets:/Clietn/static:ro
+      - client_assets:/Client/static:ro
     restart: always
 
   email_worker:
