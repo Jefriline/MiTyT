@@ -65,6 +65,7 @@
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
     --radius-2xl: 1rem;
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --animate-spin: spin 1s linear infinite;
     --blur-sm: 8px;
     --aspect-video: 16 / 9;
@@ -223,6 +224,9 @@
   }
 }
 @layer utilities {
+  .visible {
+    visibility: visible;
+  }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -357,6 +361,9 @@
   .aspect-video {
     aspect-ratio: var(--aspect-video);
   }
+  .h-2\.5 {
+    height: calc(var(--spacing) * 2.5);
+  }
   .h-4 {
     height: calc(var(--spacing) * 4);
   }
@@ -381,14 +388,23 @@
   .h-16 {
     height: calc(var(--spacing) * 16);
   }
+  .h-auto {
+    height: auto;
+  }
   .h-full {
     height: 100%;
+  }
+  .h-screen {
+    height: 100vh;
   }
   .min-h-96 {
     min-height: calc(var(--spacing) * 96);
   }
   .min-h-\[70px\] {
     min-height: 70px;
+  }
+  .min-h-\[200px\] {
+    min-height: 200px;
   }
   .min-h-screen {
     min-height: 100vh;
@@ -411,6 +427,9 @@
   .w-12 {
     width: calc(var(--spacing) * 12);
   }
+  .w-14 {
+    width: calc(var(--spacing) * 14);
+  }
   .w-16 {
     width: calc(var(--spacing) * 16);
   }
@@ -429,8 +448,20 @@
   .max-w-7xl {
     max-width: var(--container-7xl);
   }
+  .max-w-\[140px\] {
+    max-width: 140px;
+  }
   .max-w-md {
     max-width: var(--container-md);
+  }
+  .min-w-0 {
+    min-width: calc(var(--spacing) * 0);
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .flex-\[2\] {
+    flex: 2;
   }
   .flex-none {
     flex: none;
@@ -443,6 +474,9 @@
   }
   .flex-grow {
     flex-grow: 1;
+  }
+  .-rotate-90 {
+    rotate: calc(90deg * -1);
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
@@ -529,6 +563,13 @@
       margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
+  .space-y-6 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
   .space-y-8 {
     :where(& > :not(:last-child)) {
       --tw-space-y-reverse: 0;
@@ -549,6 +590,9 @@
   }
   .overflow-hidden {
     overflow: hidden;
+  }
+  .overflow-y-auto {
+    overflow-y: auto;
   }
   .rounded {
     border-radius: 0.25rem;
@@ -576,6 +620,10 @@
   .border-4 {
     border-style: var(--tw-border-style);
     border-width: 4px;
+  }
+  .border-x {
+    border-inline-style: var(--tw-border-style);
+    border-inline-width: 1px;
   }
   .border-t {
     border-top-style: var(--tw-border-style);
@@ -653,6 +701,9 @@
   }
   .bg-gray-100 {
     background-color: var(--color-gray-100);
+  }
+  .bg-gray-200 {
+    background-color: var(--color-gray-200);
   }
   .bg-green-50 {
     background-color: var(--color-green-50);
@@ -788,6 +839,9 @@
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
   }
+  .text-\[10px\] {
+    font-size: 10px;
+  }
   .text-\[18px\] {
     font-size: 18px;
   }
@@ -919,6 +973,12 @@
     --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
+  .shadow-\[\#39A900\]\/30 {
+    --tw-shadow-color: color-mix(in srgb, #39A900 30%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, #39A900 30%, transparent) var(--tw-shadow-alpha), transparent);
+    }
+  }
   .brightness-0 {
     --tw-brightness: brightness(0%);
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
@@ -967,6 +1027,10 @@
   .duration-700 {
     --tw-duration: 700ms;
     transition-duration: 700ms;
+  }
+  .ease-in-out {
+    --tw-ease: var(--ease-in-out);
+    transition-timing-function: var(--ease-in-out);
   }
   .focus-within\:border-\[\#39A900\] {
     &:focus-within {
@@ -1561,6 +1625,10 @@
   syntax: "*";
   inherits: false;
 }
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-translate-x {
   syntax: "*";
   inherits: false;
@@ -1660,6 +1728,7 @@
       --tw-backdrop-saturate: initial;
       --tw-backdrop-sepia: initial;
       --tw-duration: initial;
+      --tw-ease: initial;
       --tw-translate-x: 0;
       --tw-translate-y: 0;
       --tw-translate-z: 0;

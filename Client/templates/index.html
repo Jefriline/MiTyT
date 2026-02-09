@@ -60,8 +60,21 @@
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Regional:</span> {{ user.InformacionFormacion.Regional }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Centro:</span> {{ user.InformacionFormacion.CentroFormacion }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Ficha:</span> {{ user.InformacionFormacion.Ficha }}</p>
-            <p class="mt-2 text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Programa:</span> {{ user.InformacionFormacion.Programa }}</p>
-            <p class="mt-2 text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Modalidad:</span> {{ user.InformacionFormacion.Modalidad }}</p>
+            <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Programa:</span> {{ user.InformacionFormacion.Programa }}</p>
+            <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Modalidad:</span> {{ user.InformacionFormacion.Modalidad }}</p>
+            <div class="text-[18px]">
+              <p class="font-bold text-gray-700 text-[18px]">Porcentaje de avance:</p>
+              <p class="mt-1 flex items-center gap-3 flex-wrap">
+                <span class="font-semibold text-[#39A900]">{{ user.InformacionFormacion.PorcentajeAvanceActual or '-' }}{% if user.InformacionFormacion.PorcentajeAvanceActual and '%' not in (user.InformacionFormacion.PorcentajeAvanceActual|string) %}%{% endif %}</span>
+                {% set pct_raw = (user.InformacionFormacion.PorcentajeAvanceActual or '')|string|trim|replace('%','') %}
+                {% set pct_num = pct_raw|int %}
+                {% if pct_num >= 1 and pct_num <= 100 %}
+                <span class="flex-1 min-w-0 max-w-[140px] h-2.5 bg-gray-200 rounded-full overflow-hidden" aria-hidden="true">
+                  <span class="block h-full bg-[#39A900] rounded-full transition-all duration-300" style="width: {{ pct_num }}%"></span>
+                </span>
+                {% endif %}
+              </p>
+            </div>
           </div>
         </div>
 
