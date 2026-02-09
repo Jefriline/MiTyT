@@ -70,7 +70,7 @@
                 {% set pct_num = pct_raw|int %}
                 {% if pct_num >= 1 and pct_num <= 100 %}
                 <span class="flex-1 min-w-0 max-w-[140px] h-2.5 bg-gray-200 rounded-full overflow-hidden" aria-hidden="true">
-                  <span class="block h-full bg-[#39A900] rounded-full transition-all duration-300" style="--pct: {{ pct_num }}; width: calc(var(--pct) * 1%);"></span>
+                  <span class="block h-full bg-[#39A900] rounded-full transition-all duration-300" style="width: {{ pct_num }}%"></span>
                 </span>
                 {% endif %}
               </p>
