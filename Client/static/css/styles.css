@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-/* Escaneo explicito de plantillas para que todas las clases se incluyan en dist.css (build en VPS). */
-@source "./templates/**/*.html";
+/* Escaneo explicito de plantillas (ruta relativa al CSS: static/css -> ../../templates). */
+@source "../../templates/**/*.html";
 
-/* Safelist: clases usadas en index/layout que no deben faltar si el escaneo falla. */
-@source inline("w-5 h-5 w-6 h-6 w-7 h-7 w-4 h-4 flex-shrink-0 text-red-600 text-red-700 bg-red-50 bg-red-500 border-red-200 rounded-lg rounded-full bg-gray-100 bg-gray-200 text-gray-500 text-gray-600 text-gray-700 text-gray-800 pt-8 px-8");
+/* Safelist: clases criticas de index/layout por si el escaneo falla en el build. */
+@source inline("fixed top-0 left-0 right-0 z-50 flex items-start gap-4 px-6 py-5 rounded-full bg-[#39A900] bg-[#e8f5e9] bg-red-50 bg-red-500 bg-gray-100 bg-gray-200 text-red-700 text-gray-500 text-gray-600 text-gray-700 text-gray-800 text-gray-900 w-5 h-5 w-6 h-6 w-7 h-7 flex-shrink-0 rounded-2xl shadow-sm overflow-hidden pt-8 px-8 space-y-3 font-bold text-xl text-[18px]");
