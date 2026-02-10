@@ -17,6 +17,7 @@ class InformacionFormacionDTO(BaseModel):
 class InformacionConvocatorioDTO(BaseModel):
     EstadoListadoSENA: str = ""
     ResponsablePago: str = ""
+    Observaciones: str = ""
 
 
 class AprendizCreateDTO(BaseModel):

@@ -33,6 +33,9 @@ NORMALIZADO_A_CANONICO: dict[str, str] = {
     "contraseñaaprisma": "ContrasenaPRISMA",
     "correodelcentroformación": "CorreoCentroFormacion",
     "correodelcentroformacion": "CorreoCentroFormacion",
+    "observaciones": "Observaciones",
+    "estadoinscripcion": "EstadoInscripcion",
+    "estadoinscripción": "EstadoInscripcion",
 }
 
 CANONICOS_REQUERIDOS = frozenset({"NroDocumento", "CorreoPersonal", "Ficha", "EstadoListadoSENA"})
@@ -75,6 +78,8 @@ CANONICO_A_INDICES_KEY: dict[str, str] = {
     "UsuarioPrisma": "usuarioprisma",
     "ContrasenaPRISMA": "contrasenaprisma",
     "CorreoCentroFormacion": "correocentroformacion",
+    "Observaciones": "observaciones",
+    "EstadoInscripcion": "estadoinscripcion",
 }
 
 CANONICOS_OPCIONALES = frozenset(
@@ -85,19 +90,22 @@ CANONICOS_OPCIONALES = frozenset(
         "Modalidad", "EstadoAprendiz", "PorcentajeAvanceActual",
         "AplicoBeneficioPagoAnteriormente", "DatosBeneficioAplicado", "ResponsablePago",
         "UsuarioPrisma", "ContrasenaPRISMA", "CorreoCentroFormacion", "Programa",
+        "Observaciones", "EstadoInscripcion",
     }
 )
 
 CAMPOS_OBLIGATORIOS_NORMALIZADOS = ("nrodocumento", "correopersonal", "ficha", "estadolistadosena")
 
 MENSAJE_HEADERS_FALTANTES = (
-    "La primera fila debe tener columnas que correspondan (ignorando mayúsculas y espacios) a: "
+    "No se encontró una fila de encabezados válida en las primeras filas del Excel. "
+    "Asegúrese de que una fila (puede no ser la línea 1) tenga columnas que correspondan (ignorando mayúsculas y espacios) a: "
     "Nro. Documento, Correo personal, Ficha, Estado Listado SENA. "
     "Opcionales: Regional, Centro de formación, Convocatoria, Primer/Segundo Apellido/Nombre, Tipo Documento, "
     "País/Departamento/Ciudad Residencia, Programa, Fechas Ficha, Modalidad, Estado del Aprendiz, "
-    "Porcentaje Avance, Beneficio Pago, Responsable de Pago, Usuario Prisma, Contraseña PRISMA, "
-    "Correo del centro formación."
+    "Porcentaje Avance, Observaciones, Estado Inscripción, Beneficio Pago, Responsable de Pago, "
+    "Usuario Prisma, Contraseña PRISMA, Correo del centro formación."
 )
 
 MAX_FILAS_EXCEL = 5000
 BATCH_SIZE_UPLOAD = 250
+MAX_FILAS_BUSCAR_HEADER = 30

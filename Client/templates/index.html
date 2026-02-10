@@ -36,25 +36,82 @@
       </form>
     </div>
 
-    {% if user %} 
+    {% if user %}
+    {% set estado_inscripcion_raw = (user.EstadoInscripcion or user.get('EstadoInscripcion') or '')|string|trim %}
+    {% set estado_inscripcion_upper = (estado_inscripcion_raw|upper) %}
+    {% set estado_inscrito = estado_inscripcion_upper == 'INSCRITO' %}
+    {% set estado_debe_completar_prisma = 'DEBE COMPLETAR' in estado_inscripcion_upper %}
+    {% set estado_no_definido = estado_inscripcion_upper == 'NO DEFINIDO' %}
+    {% set pct_raw = (user.InformacionFormacion.PorcentajeAvanceActual or '')|string|trim|replace('%','') %}
+    {% set pct_num = pct_raw|int %}
+    {% set estado_convocatoria = (user.InformacionConvocatorio.EstadoListadoSENA or user.InformacionConvocatorio.EstadoConvocatoria or '')|string|trim %}
+    {% set no_habilitado = ((estado_convocatoria|upper) == 'NO HABILITADO') %}
+
     <div class="w-full max-w-5xl mt-12 px-4 animate-in fade-in duration-700">
-      <div class="flex items-center gap-4 mb-8">
+      <div class="flex items-center gap-4 mb-6">
         <div class="h-8 w-2 bg-[#39A900] rounded-full"></div>
         <h2 class="text-3xl font-bold text-gray-800">Resultados de búsqueda</h2>
       </div>
 
-      <div class="grid  grid-cols-1 md:grid-cols-2 lg:grid-rows-3 gap-8">
-        <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border-t-4 border-gray-200 hover:shadow-2xl transition-shadow duration-300">
-          <h2 class="font-black text-[#39A900] uppercase tracking-wider text-sm mb-4 text-xl">Datos básicos</h2>
-          <div class="space-y-3">
-            <p class="text-gray-600 text-sm text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Nombre:</span> {{ user.Nombre }}</p>
-            <p class="text-gray-600 text-sm text-[18px]"><span class="font-semibold text-gray-800 text-[18px]">Documento:</span> {{ user.TipoDocumento }}</p>
-            <p class="text-gray-600 text-sm text-[18px]"><span class="font-semibold text-gray-800 text-[18px]">Nro Documento:</span> {{ user.NroDocumento or user['Nro-Documento'] }}</p>
-            <p class="text-gray-600 text-sm text-[18px]"><span class="font-semibold text-gray-800 text-[18px]">Email:</span> {{ user.CorreoPersonal or user.Correo }}</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-rows-3 gap-8">
+        <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm overflow-hidden transition-shadow duration-300">
+          {% if estado_inscrito %}
+          <div class="bg-[#e8f5e9] px-6 py-5 flex items-start gap-4">
+            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#39A900] text-white" aria-hidden="true">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+            </span>
+            <div>
+              <p class="text-xl font-bold text-gray-900">INSCRIPCIÓN CONFIRMADA</p>
+              <p class="mt-0.5 text-sm text-gray-600">Cumples con los criterios para la convocatoria TyT.</p>
+            </div>
+          </div>
+          {% elif estado_debe_completar_prisma %}
+          <div class="bg-red-50 px-6 py-5 flex items-start gap-4">
+            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-500 text-white" aria-hidden="true">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </span>
+            <div>
+              <p class="text-xl font-bold text-gray-900">{{ estado_inscripcion_raw }}</p>
+              <p class="mt-0.5 text-sm text-red-700">Debes completar tu inscripción en PRISMA.</p>
+            </div>
+          </div>
+          {% elif estado_no_definido %}
+          <div class="bg-gray-100 px-6 py-5 flex items-start gap-4">
+            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gray-500 text-white" aria-hidden="true">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </span>
+            <div>
+              <p class="text-xl font-bold text-gray-900">NO DEFINIDO</p>
+              <p class="mt-0.5 text-sm text-gray-600">El estado de tu inscripción aún no está definido.</p>
+            </div>
+          </div>
+          {% else %}
+          <div class="bg-gray-100 px-6 py-5 flex items-start gap-4">
+            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gray-500 text-white" aria-hidden="true">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </span>
+            <div>
+              <p class="text-xl font-bold text-gray-900">{{ estado_inscripcion_raw or 'Estado inscripción' }}</p>
+              <p class="mt-0.5 text-sm text-gray-600">Revisa el estado de tu inscripción.</p>
+            </div>
+          </div>
+          {% endif %}
+          <div class="p-8 pt-6">
+            <h2 class="font-black text-[#39A900] uppercase tracking-wider text-sm mb-4 text-xl">Datos básicos</h2>
+            <div class="space-y-3">
+              <p class="text-gray-700 text-[18px]"><span class="font-bold text-gray-800">Nombre:</span> {{ user.Nombre }}</p>
+              <p class="text-gray-700 text-[18px]"><span class="font-bold text-gray-800">Documento:</span> {{ user.TipoDocumento }}</p>
+              <p class="text-gray-700 text-[18px]"><span class="font-bold text-gray-800">Nro Documento:</span> {{ user.NroDocumento or user['Nro-Documento'] }}</p>
+              <p class="text-gray-700 text-[18px]"><span class="font-bold text-gray-800">Email:</span> {{ user.CorreoPersonal or user.Correo }}</p>
+            </div>
+            <div class="mt-6 pt-5 border-t border-gray-200">
+              <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Estado de inscripción</p>
+              <p class="inline-block px-4 py-2 rounded-lg font-semibold text-[18px] {{ 'bg-[#e8f5e9] text-[#2d8500]' if estado_inscrito else ('bg-red-50 text-red-700' if estado_debe_completar_prisma else 'bg-gray-200 text-gray-800') }}">{{ estado_inscripcion_raw or '-' }}</p>
+            </div>
           </div>
         </div>
 
-        <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border-t-4 border-gray-200 hover:shadow-2xl transition-shadow duration-300">
+        <div class="lg:col-span-2 bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-100 transition-shadow duration-300">
           <h2 class="font-black text-[#39A900] uppercase tracking-wider text-sm mb-4 text-xl">Datos académicos</h2>
           <div class="space-y-2 text-sm">
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Regional:</span> {{ user.InformacionFormacion.Regional }}</p>
@@ -62,23 +119,23 @@
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Ficha:</span> {{ user.InformacionFormacion.Ficha }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Programa:</span> {{ user.InformacionFormacion.Programa }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-700 text-[18px]">Modalidad:</span> {{ user.InformacionFormacion.Modalidad }}</p>
-            <div class="text-[18px]">
-              <p class="font-bold text-gray-700 text-[18px]">Porcentaje de avance:</p>
-              <p class="mt-1 flex items-center gap-3 flex-wrap">
-                <span class="font-semibold text-[#39A900]">{{ user.InformacionFormacion.PorcentajeAvanceActual or '-' }}{% if user.InformacionFormacion.PorcentajeAvanceActual and '%' not in (user.InformacionFormacion.PorcentajeAvanceActual|string) %}%{% endif %}</span>
-                {% set pct_raw = (user.InformacionFormacion.PorcentajeAvanceActual or '')|string|trim|replace('%','') %}
-                {% set pct_num = pct_raw|int %}
-                {% if pct_num >= 1 and pct_num <= 100 %}
-                <span class="flex-1 min-w-0 max-w-[140px] h-2.5 bg-gray-200 rounded-full overflow-hidden" aria-hidden="true">
-                  <span class="block h-full bg-[#39A900] rounded-full transition-all duration-300" style="width: {{ pct_num }}%"></span>
-                </span>
-                {% endif %}
-              </p>
+            <div class="mt-5 pt-4 border-t border-gray-200">
+              <p class="text-3xl font-bold {{ 'text-[#2d8500]' if pct_num >= 80 else 'text-[#39A900]' }}">{{ user.InformacionFormacion.PorcentajeAvanceActual or '-' }}{% if user.InformacionFormacion.PorcentajeAvanceActual and '%' not in (user.InformacionFormacion.PorcentajeAvanceActual|string) %}%{% endif %}</p>
+              <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mt-0.5">Avance del programa</p>
+              {% if pct_num >= 1 and pct_num <= 100 %}
+              <span class="mt-2 block h-3 w-full max-w-[200px] bg-gray-200 rounded-full overflow-hidden" aria-hidden="true">
+                <span class="block h-full rounded-full transition-all duration-300 {{ 'bg-[#2d8500]' if pct_num >= 80 else 'bg-[#39A900]' }}" style="width: {{ pct_num }}%"></span>
+              </span>
+              {% endif %}
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-200">
+              <p class="font-bold text-gray-700 text-[18px]">Observaciones:</p>
+              <p class="mt-1 text-gray-700">{{ user.InformacionConvocatorio.Observaciones or user.InformacionConvocatorio.get('Observaciones') or '-' }}</p>
             </div>
           </div>
         </div>
 
-        <div class=" lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border-t-4 border-gray-200 hover:shadow-2xl transition-shadow duration-300">
+        <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border-l-4 border-[#39A900] border-t border-r border-b border-gray-200 hover:shadow-2xl transition-shadow duration-300">
           <h2 class="font-black text-[#39A900] uppercase tracking-wider text-sm mb-4 text-xl">Convocatoria</h2>
           <div class="space-y-2 text-sm text-gray-700">
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Estado:</span> {{ user.InformacionConvocatorio.EstadoListadoSENA or user.InformacionConvocatorio.EstadoConvocatoria or '-' }}</p>
@@ -86,22 +143,20 @@
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Responsable de Pago:</span> {{ user.InformacionConvocatorio.ResponsablePago or user.InformacionConvocatorio.ResponablePago or '-' }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Pais:</span> {{ user.PaisResidencia or '-' }}</p>
             <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Ciudad:</span> {{ user.CiudadResidencia or '-' }}</p>
-            <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Estado Términos:</span> {{ '-' }}</p>
+            <p class="text-[18px]"><span class="font-bold text-gray-900 text-[18px]">Observaciones:</span> {{ user.InformacionConvocatorio.Observaciones or user.InformacionConvocatorio.get('Observaciones') or '-' }}</p>
             <p class="mt-3 text-[18px] text-gray-700">Para más información consulte al correo de su centro de formación: <span class="font-semibold text-gray-900">{{ user.InformacionFormacion.CorreoCentroFormacion or '-' }}</span></p>
           </div>
         </div>
       </div>
 
-      {% set estado_convocatoria = (user.InformacionConvocatorio.EstadoListadoSENA or user.InformacionConvocatorio.EstadoConvocatoria or '')|string|trim %}
-      {% set no_habilitado = ((estado_convocatoria|upper) == 'NO HABILITADO') %}
-      <div class="mt-8 flex flex-col items-center gap-4" id="credentialsSection" data-document="{{ (user.NroDocumento or user['Nro-Documento'])|e }}" data-turnstile-key="{{ turnstile_site_key|e }}" data-estado-convocatoria="{{ estado_convocatoria|e }}">
+      <div class="mt-10 flex flex-col items-center gap-4" id="credentialsSection" data-document="{{ (user.NroDocumento or user['Nro-Documento'])|e }}" data-turnstile-key="{{ turnstile_site_key|e }}" data-estado-convocatoria="{{ estado_convocatoria|e }}">
         <button
           type="button"
           id="btnRequestCredentials"
-          class="bg-[#39A900] text-white px-6 py-3 rounded-lg hover:bg-[#2d8500] hover:shadow-lg active:scale-95 transition-all duration-200 font-semibold shadow-md flex items-center gap-2 {{ 'opacity-60 cursor-not-allowed' if no_habilitado else '' }}"
+          class="bg-[#39A900] text-white px-8 py-4 rounded-xl hover:bg-[#2d8500] hover:shadow-lg active:scale-[0.98] transition-all duration-200 font-bold text-lg shadow-md flex items-center gap-2 {{ 'opacity-60 cursor-not-allowed' if no_habilitado else '' }}"
           {{ 'disabled' if no_habilitado else '' }}
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
           </svg>
           Consultar Usuario y Contraseña PRISMA

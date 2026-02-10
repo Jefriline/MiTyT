@@ -3,11 +3,28 @@ from io import BytesIO
 from openpyxl import load_workbook
 
 from utils.excel_aprendiz.constants import (
+    MAX_FILAS_BUSCAR_HEADER,
     MAX_FILAS_EXCEL,
     MENSAJE_HEADERS_FALTANTES,
 )
 from utils.excel_aprendiz.normalize import normalize_document_key
 from utils.excel_aprendiz.row_mapper import _fila_a_aprendiz, _indices_headers
+
+
+def _buscar_fila_encabezados(sheet) -> tuple[tuple | None, int]:
+    """
+    Busca en las primeras filas la que contiene los encabezados requeridos.
+    Devuelve (header_row, 1-based_row_index) o (None, 0) si no encuentra.
+    """
+    primeras_filas = list(
+        sheet.iter_rows(min_row=1, max_row=MAX_FILAS_BUSCAR_HEADER, values_only=True)
+    )
+    for idx, fila in enumerate(primeras_filas):
+        if fila is None:
+            continue
+        if _indices_headers(fila) is not None:
+            return (fila, idx + 1)
+    return (None, 0)
 
 
 def parse_excel_to_aprendices(
@@ -24,18 +41,18 @@ def parse_excel_to_aprendices(
         workbook.close()
         return [], ["El archivo no tiene hojas o está vacío"], []
 
-    rows_iter = sheet.iter_rows(min_row=1, values_only=True)
-    header_row = next(rows_iter, None)
-    if not header_row:
-        workbook.close()
-        return [], ["El archivo no tiene filas"], []
-
-    indices = _indices_headers(header_row)
-    if indices is None:
+    header_row, header_row_index = _buscar_fila_encabezados(sheet)
+    if header_row is None or header_row_index == 0:
         workbook.close()
         return [], [MENSAJE_HEADERS_FALTANTES], []
 
-    for row_index, row in enumerate(rows_iter, start=2):
+    indices = _indices_headers(header_row)
+    assert indices is not None
+
+    data_start_row = header_row_index + 1
+    rows_iter = sheet.iter_rows(min_row=data_start_row, values_only=True)
+
+    for row_index, row in enumerate(rows_iter, start=data_start_row):
         if row is None:
             continue
         if len(rows_deduped) >= MAX_FILAS_EXCEL:

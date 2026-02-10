@@ -98,6 +98,7 @@ def _fila_a_aprendiz(row: tuple, indices: dict[str, int]) -> dict | None:
     informacion_convocatorio = {
         "EstadoListadoSENA": valor("estadolistadosena"),
         "ResponsablePago": valor("responsablepago"),
+        "Observaciones": valor("observaciones"),
     }
 
     return {
@@ -119,4 +120,5 @@ def _fila_a_aprendiz(row: tuple, indices: dict[str, int]) -> dict | None:
         "EstadoAprendiz": valor("estadoaprendiz"),
         "AplicoBeneficioPagoAnteriormente": valor("aplicobeneficiopagoanteriormente"),
         "DatosBeneficioAplicado": valor("datosbeneficioaplicado"),
+        "EstadoInscripcion": valor("estadoinscripcion"),
     }
