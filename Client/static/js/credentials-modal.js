@@ -55,6 +55,12 @@
     if (el) {
       el.classList.remove("hidden");
       el.classList.add("flex");
+      var panel = el.querySelector(".modal-panel");
+      if (panel) {
+        panel.classList.remove("animate-modal-in");
+        panel.offsetHeight;
+        panel.classList.add("animate-modal-in");
+      }
     }
   }
 

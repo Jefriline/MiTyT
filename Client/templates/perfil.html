@@ -4,42 +4,44 @@
 
 {% block content %}
 <div class="flex flex-col items-center min-h-96 py-8">
-    <div class="text-center mb-8">
+    <div class="text-center mb-10 animate-fade-in">
       <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Perfil de administrador</h1>
       <p class="text-gray-600">Tu tarea principal es cargar y actualizar aprendices.</p>
     </div>
 
     <div class="w-full max-w-2xl">
-        <section class="bg-white border border-gray-200 rounded-lg shadow-sm mb-6">
-            <div class="border-b border-gray-200 px-5 py-4">
+        <section class="bg-white border border-gray-200 rounded-2xl shadow-sm mb-6 overflow-hidden transition-all duration-300 hover:shadow-md animate-slide-up opacity-0" style="animation-delay: 0.05s; animation-fill-mode: forwards;">
+            <div class="border-b border-gray-100 px-6 py-5">
                 <h2 class="text-lg font-bold text-gray-900">Cargar aprendices (Excel)</h2>
                 <p class="text-sm text-gray-600 mt-1">Este archivo creará o actualizará aprendices en el sistema. Los datos se validan automáticamente.</p>
                 <p class="text-xs text-gray-500 mt-1">Solo archivos .xlsx, máximo 20 MB.</p>
             </div>
-            <div class="p-5">
+            <div class="p-6">
                 <div id="upload-success-block" class="hidden text-center py-8 px-4">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#39A900] text-white text-3xl mb-4" aria-hidden="true">&#10003;</div>
+                    <span class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#39A900] text-white mb-4" aria-hidden="true">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                    </span>
                     <p class="text-xl font-bold text-gray-900 mb-1">Carga finalizada correctamente</p>
                     <p id="upload-success-detail" class="text-gray-600 mb-2"></p>
                     <p id="upload-success-time" class="text-sm font-medium text-gray-500 mb-6 inline-flex items-center justify-center gap-2 rounded-full bg-gray-100 px-4 py-2 w-fit"></p>
                     <p class="text-sm text-gray-500 mb-4">Puedes salir de esta página o cargar un nuevo archivo.</p>
-                    <button type="button" id="upload-another-btn" class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg font-medium border-2 border-[#39A900] text-[#39A900] hover:bg-[#39A900] hover:text-white transition">
+                    <button type="button" id="upload-another-btn" class="inline-flex items-center justify-center px-5 py-3 rounded-xl font-medium border-2 border-[#39A900] text-[#39A900] hover:bg-[#39A900] hover:text-white transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#39A900] focus:ring-offset-2 min-h-[44px]">
                         Cargar otro archivo
                     </button>
                 </div>
                 <div id="upload-form-block">
-                    <div id="upload-message" class="hidden mb-4 p-4 rounded-lg text-sm border"></div>
+                    <div id="upload-message" class="hidden mb-4 p-4 rounded-xl text-sm border"></div>
                     <form id="upload-form" action="/users/upload" method="POST" enctype="multipart/form-data" class="space-y-4">
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 transition-colors hover:border-gray-400 focus-within:border-[#39A900] focus-within:bg-gray-50">
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-5 transition-all duration-200 hover:border-gray-400 focus-within:border-[#39A900] focus-within:bg-[#e8f5e9]/30">
                             <label class="flex flex-col sm:flex-row sm:items-center gap-3 cursor-pointer">
-                                <span class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-semibold text-white bg-[#39A900] hover:bg-[#2d8500] transition shrink-0 text-sm">
+                                <span class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl font-semibold text-white bg-[#39A900] hover:bg-[#2d8500] transition-colors duration-200 shrink-0 text-sm cursor-pointer">
                                     Seleccionar archivo
                                 </span>
                                 <span id="file-name" class="text-sm text-gray-500 truncate">Ningún archivo seleccionado</span>
-                                <input type="file" name="file" accept=".xlsx" required class="sr-only" id="file-input" />
+                                <input type="file" name="file" accept=".xlsx" required class="sr-only" id="file-input" aria-label="Seleccionar archivo Excel" />
                             </label>
                         </div>
-                        <button type="submit" id="upload-btn" class="w-full py-3 px-4 rounded-lg font-semibold text-white bg-[#39A900] hover:bg-[#2d8500] transition border border-[#2d8500] disabled:opacity-60 disabled:cursor-not-allowed">
+                        <button type="submit" id="upload-btn" class="w-full py-3.5 px-4 rounded-xl font-semibold text-white bg-[#39A900] hover:bg-[#2d8500] transition-all duration-200 border border-[#2d8500] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#39A900] focus:ring-offset-2 min-h-[48px]">
                             Subir archivo
                         </button>
                     </form>
@@ -47,7 +49,7 @@
             </div>
         </section>
 
-        <section class="bg-white border border-gray-200 rounded-lg shadow-sm px-5 py-4">
+        <section class="bg-white border border-gray-200 rounded-2xl shadow-sm px-6 py-5 transition-all duration-300 hover:shadow-md animate-slide-up opacity-0" style="animation-delay: 0.1s; animation-fill-mode: forwards;">
             <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Información de la sesión</h2>
             <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600">
                 <span><strong class="text-gray-800">Rol:</strong> {{ session['login_user']['role'] }}</span>
@@ -55,8 +57,8 @@
             </div>
         </section>
 
-        <div id="upload-spinner" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div class="bg-white border border-gray-200 rounded-lg p-8 flex flex-col items-center gap-4 shadow-lg">
+        <div id="upload-spinner" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div class="bg-white border border-gray-200 rounded-2xl p-8 flex flex-col items-center gap-4 shadow-xl animate-scale-in">
                 <div class="w-12 h-12 border-4 border-[#39A900] border-t-transparent rounded-full animate-spin"></div>
                 <p class="text-gray-700 font-medium">Subiendo archivo...</p>
             </div>

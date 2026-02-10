@@ -8,35 +8,35 @@
     <link rel="preload" href="{{ url_for('static', filename='css/dist.css') }}" as="style">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dist.css') }}">
 </head>
-<body class="flex flex-col min-h-screen bg-gray-50">
+<body class="flex flex-col min-h-screen bg-gray-50 antialiased">
 
-    <header class="fixed top-0 left-0 right-0 z-50 flex-none shadow-sm bg-white">
-        <div class="bg-[#39A900] text-white px-4 py-2 text-center">
-            <a href="/Help/video" class="inline-flex items-center gap-2 font-semibold hover:underline focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#39A900] rounded">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+    <header class="fixed top-0 left-0 right-0 z-50 flex-none">
+        <div class="bg-[#39A900] text-white px-4 py-2.5 text-center transition-colors duration-200">
+            <a href="/Help/video" class="inline-flex items-center gap-2 font-semibold hover:underline focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#39A900] rounded focus:visible cursor-pointer transition-opacity duration-200 hover:opacity-90" aria-label="Material de apoyo para proceso de inscripción">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
                 Material de apoyo para proceso de inscripción
             </a>
         </div>
-        <nav class="bg-white shadow-md">
+        <nav class="bg-white shadow-md border-b border-gray-100">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-14">
+                <div class="flex justify-between items-center h-16">
                     <div class="flex items-center gap-3">
                         <img src="{{ url_for('static', filename='img/logoSena.png') }}" alt="SENA Logo" class="h-9 w-9 sm:h-10 sm:w-10 object-contain">
-                        <a href="/" class="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">
+                        <a href="/" class="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 hover:text-[#39A900] transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#39A900] focus:ring-offset-2 rounded">
                             Bienvenido a <span class="text-[#39A900]">MiTyT</span>
                         </a>
                     </div>
-                    <button type="button" id="navMenuToggle" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#39A900]" aria-expanded="false" aria-controls="navMenu">
-                        <svg class="w-6 h-6" id="navMenuIconOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                        <svg class="w-6 h-6 hidden" id="navMenuIconClose" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <button type="button" id="navMenuToggle" class="lg:hidden p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#39A900] focus:ring-offset-2 cursor-pointer transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-expanded="false" aria-controls="navMenu" aria-label="Abrir o cerrar menú">
+                        <svg class="w-6 h-6" id="navMenuIconOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        <svg class="w-6 h-6 hidden" id="navMenuIconClose" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
-                    <ul id="navMenu" class="hidden lg:flex lg:items-center lg:space-x-6 absolute lg:relative top-full left-0 right-0 lg:top-0 bg-white lg:bg-transparent shadow-lg lg:shadow-none py-4 lg:py-0 z-20">
-                        <li class="border-t lg:border-t-0"><a href="/" class="block px-4 lg:px-0 py-3 lg:py-0 text-gray-700 hover:text-[#39A900] hover:bg-gray-50 lg:hover:bg-transparent transition font-medium">Inicio</a></li>
+                    <ul id="navMenu" class="hidden lg:flex lg:items-center lg:gap-1 absolute lg:relative top-full left-0 right-0 lg:top-0 bg-white lg:bg-transparent shadow-lg lg:shadow-none py-4 lg:py-0 z-20 border-t lg:border-t-0 border-gray-100">
+                        <li><a href="/" class="block px-4 lg:px-3 py-3 lg:py-2 text-gray-700 hover:text-[#39A900] hover:bg-gray-50 lg:hover:bg-transparent rounded-lg lg:rounded-md transition-colors duration-200 font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#39A900] focus:ring-inset">Inicio</a></li>
                         {% if session.get('login_user') %}
-                            <li class="border-t lg:border-t-0"><a href="/users/perfil" class="block px-4 lg:px-0 py-3 lg:py-0 text-gray-700 hover:text-[#39A900] hover:bg-gray-50 lg:hover:bg-transparent transition font-medium">Perfil</a></li>
-                            <li class="border-t lg:border-t-0"><a href="/users/logout" class="block px-4 lg:px-0 py-3 lg:py-0 text-gray-700 hover:text-[#39A900] hover:bg-gray-50 lg:hover:bg-transparent transition font-medium">Cerrar sesión</a></li>
+                            <li><a href="/users/perfil" class="block px-4 lg:px-3 py-3 lg:py-2 text-gray-700 hover:text-[#39A900] hover:bg-gray-50 lg:hover:bg-transparent rounded-lg lg:rounded-md transition-colors duration-200 font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#39A900] focus:ring-inset">Perfil</a></li>
+                            <li><a href="/users/logout" class="block px-4 lg:px-3 py-3 lg:py-2 text-gray-700 hover:text-[#39A900] hover:bg-gray-50 lg:hover:bg-transparent rounded-lg lg:rounded-md transition-colors duration-200 font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#39A900] focus:ring-inset">Cerrar sesión</a></li>
                         {% else %}
-                            <li class="border-t lg:border-t-0"><a href="/users/login" class="block px-4 lg:px-0 py-3 lg:py-0 text-gray-700 hover:text-[#39A900] hover:bg-gray-50 lg:hover:bg-transparent transition font-medium">Iniciar sesión</a></li>
+                            <li><a href="/users/login" class="block px-4 lg:px-3 py-3 lg:py-2 text-gray-700 hover:text-[#39A900] hover:bg-gray-50 lg:hover:bg-transparent rounded-lg lg:rounded-md transition-colors duration-200 font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#39A900] focus:ring-inset">Iniciar sesión</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -44,35 +44,33 @@
         </nav>
     </header>
 
-    <main class="flex-grow flex flex-col pt-24">
-        <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-5 py-8 flex-grow flex flex-col">
+    <main class="flex-grow flex flex-col pt-28">
+        <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-grow flex flex-col">
             {% block content %}
             {% endblock %}
         </div>
     </main>
 
-    <footer class="bg-[#39A900] text-white">
-        <div class="max-w-7xl mx-auto px-6 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                
-                <div class="flex flex-col space-y-4 text-center md:text-left">
+    <footer class="bg-[#39A900] text-white mt-auto">
+        <div class="max-w-7xl mx-auto px-6 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+                <div class="flex flex-col space-y-5 text-center md:text-left">
                     <div class="flex items-center justify-center md:justify-start gap-2">
-                        <img src="{{ url_for('static', filename='img/logoSena.png') }}" alt="SENA" class="h-6 w-6 brightness-0 invert">
-                        <span class="font-bold tracking-wider">PROYECTO MiTyT</span>
+                        <img src="{{ url_for('static', filename='img/logoSena.png') }}" alt="SENA" class="h-7 w-7 brightness-0 invert">
+                        <span class="font-bold tracking-wider text-white">PROYECTO MiTyT</span>
                     </div>
                     <ul class="flex flex-wrap justify-center md:justify-start gap-6 text-sm">
-                        <li><a href="https://www.icfes.gov.co/" target="_blank" rel="noopener noreferrer" class="hover:text-gray-200 transition">Acceso a Icfes</a></li>
-                        <li><a href="https://prisma.icfes.edu.co/prisma-web/pages/administracion/autenticacion/autenticacionIcfes.jsf?faces-redirect=true#No-back-button" target="_blank" rel="noopener noreferrer" class="hover:text-gray-200 transition">Acceso a PRISMA</a></li>
-                        <li><a href="/Help/video" class="hover:text-gray-200 transition">Material de apoyo para proceso de inscripción</a></li>
+                        <li><a href="https://www.icfes.gov.co/" target="_blank" rel="noopener noreferrer" class="hover:text-green-100 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#39A900] rounded">Acceso a Icfes</a></li>
+                        <li><a href="https://prisma.icfes.edu.co/prisma-web/pages/administracion/autenticacion/autenticacionIcfes.jsf?faces-redirect=true#No-back-button" target="_blank" rel="noopener noreferrer" class="hover:text-green-100 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#39A900] rounded">Acceso a PRISMA</a></li>
+                        <li><a href="/Help/video" class="hover:text-green-100 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#39A900] rounded">Material de apoyo para proceso de inscripción</a></li>
                     </ul>
-                    <p class="text-xs opacity-80">&copy; 2026. Todos los derechos reservados.</p>
+                    <p class="text-xs opacity-90">&copy; 2026. Todos los derechos reservados.</p>
                 </div>
-
-                <div class="text-xs text-center md:text-right border-t md:border-t-0 md:border-l border-green-400 pt-4 md:pt-0 md:pl-8 opacity-90">
-                    <p class="font-bold uppercase mb-2">Aviso de Uso Académico</p>
-                    <p class="leading-relaxed">
-                        Este sitio web ha sido desarrollado con fines estrictamente <strong>académicos y de orientación</strong> para los aprendices. 
-                        Los videos tutoriales externos son propiedad de sus respectivos autores en YouTube. 
+                <div class="text-sm text-center md:text-right border-t md:border-t-0 md:border-l border-green-400/60 pt-6 md:pt-0 md:pl-8 opacity-95">
+                    <p class="font-bold uppercase tracking-wider mb-2">Aviso de Uso Académico</p>
+                    <p class="leading-relaxed text-white/95">
+                        Este sitio web ha sido desarrollado con fines estrictamente <strong>académicos y de orientación</strong> para los aprendices.
+                        Los videos tutoriales externos son propiedad de sus respectivos autores en YouTube.
                         MiTyT no reclama autoría sobre recursos de terceros ni realiza uso comercial de los mismos.
                     </p>
                 </div>
