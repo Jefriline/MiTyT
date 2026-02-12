@@ -1,10 +1,8 @@
 import re
+import unicodedata
 
-FIREBASE_KEY_FORBIDDEN = re.compile(r"[\.\$#\[\]/]")
-# Espacios y caracteres invisibles que suelen venir al pegar/escribir en movil (ej. iPhone)
-WHITESPACE_AND_INVISIBLE = re.compile(r"[\s\u00a0\u200b\u200c\u200d\ufeff]+")
-# Digitos de ancho completo (Unicode), comunes al pegar en iOS: ０(U+FF10) a ９(U+FF19)
-FULLWIDTH_TO_HALFWIDTH = str.maketrans("０１２３４５６７８９", "0123456789")
+# Solo digitos 0-9: quita espacios, puntos, guiones, fullwidth, zero-width, etc.
+NON_DIGIT = re.compile(r"\D")
 
 
 def _normalizar_header(celda: object) -> str:
@@ -20,15 +18,11 @@ def _celda_str(value: object) -> str:
 
 
 def normalize_document_key(raw_document: str) -> str | None:
+    
     if not raw_document or not isinstance(raw_document, str):
         return None
-    cleaned = raw_document.strip()
-    if not cleaned:
+    normalized_unicode = unicodedata.normalize("NFKC", raw_document.strip())
+    digits_only = NON_DIGIT.sub("", normalized_unicode)
+    if not digits_only or len(digits_only) > 50:
         return None
-    with_normal_digits = cleaned.translate(FULLWIDTH_TO_HALFWIDTH)
-    without_spaces_and_invisible = WHITESPACE_AND_INVISIBLE.sub("", with_normal_digits)
-    key_without_forbidden = FIREBASE_KEY_FORBIDDEN.sub("", without_spaces_and_invisible)
-    key_final = key_without_forbidden.strip()
-    if not key_final or len(key_final) > 50:
-        return None
-    return key_final
+    return digits_only
