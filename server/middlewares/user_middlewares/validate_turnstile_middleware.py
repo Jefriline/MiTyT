@@ -49,6 +49,11 @@ def _verify_turnstile_token(token: str, remote_ip: str | None) -> tuple[bool, st
     if not outcome.get("success"):
         error_codes = outcome.get("error-codes", [])
         print(f"Turnstile verification failed: {error_codes}")
+        if "timeout-or-duplicate" in error_codes:
+            return False, (
+                "La verificación tardó demasiado o se envió dos veces. "
+                "En conexiones lentas o desde celular, espera a que cargue el cuadro de verificación y vuelve a intentar."
+            )
         return False, "Verificación de seguridad incorrecta. Intenta de nuevo."
 
     return True, None

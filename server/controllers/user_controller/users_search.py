@@ -4,6 +4,7 @@ from copy import deepcopy
 from flask import request, render_template
 
 from services.user_service.user_service import UserService
+from utils.excel_aprendiz.normalize import normalize_document_key
 from utils.mask_email import mask_email
 
 
@@ -27,6 +28,11 @@ class UsersSearchController:
                 )
             result = self.user_service.search_user(term)
             user = result.get("user", None)
+            if not user and result.get("error") == "Usuario no encontrado":
+                doc_key = normalize_document_key(term)
+                print(
+                    f"[search] no encontrado: raw_len={len(term)} raw_repr={repr(term)} doc_key={repr(doc_key)}"
+                )
             if user and isinstance(user, dict):
                 user = deepcopy(user)
                 if "CorreoPersonal" in user:
