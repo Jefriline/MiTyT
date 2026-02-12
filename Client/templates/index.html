@@ -19,7 +19,6 @@
               id="search_term"
               name="search_term"
               inputmode="numeric"
-              pattern="[0-9]*"
               autocomplete="off"
               placeholder="Introduce tu número de documento..."
               class="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#39A900] focus:border-[#39A900] transition-all duration-200 outline-none"
@@ -398,15 +397,6 @@
       }
 
       var searchInput = document.getElementById("search_term");
-      if (searchInput) {
-        searchInput.addEventListener("input", function() {
-          var value = this.value || "";
-          var hasNonDigit = /\D/.test(value);
-          this.setCustomValidity(hasNonDigit
-            ? "Ingresa solo números, sin espacios, puntos ni otros caracteres."
-            : "");
-        });
-      }
 
       form.addEventListener("submit", function(event) {
         if (searchInput && typeof searchInput.value === "string") {
